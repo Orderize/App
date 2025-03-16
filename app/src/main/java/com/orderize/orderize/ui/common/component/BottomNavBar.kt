@@ -85,6 +85,36 @@ fun BottomNavBar(
                     ) },
                     label = { Text("Perfil", color = Color.Black) }
                 )
+
+                NavigationBarItem(
+                    selected = currentRoute == Routes.Historico.route,
+                    onClick = {
+                        if (currentRoute != Routes.Historico.route)
+                            navController.navigate(Routes.Historico.route)
+                    },
+                    icon = {
+                        if (currentRoute != Routes.Historico.route) {
+                            Icon(
+                                painterResource(R.drawable.ic_history_default),
+                                contentDescription = "Ícone de Histórico não selecionado",
+                                tint = Color.Unspecified
+                            )
+                        } else {
+                            Icon(
+                                painterResource(R.drawable.ic_history_red),
+                                contentDescription = "Ícone de Histórico selecionado",
+                                tint = Color.Unspecified
+                            )
+                        }
+                    },
+                    label = {
+                        Text(
+                            "Histórico",
+                            color = if (currentRoute == Routes.Historico.route) Color.Red else Color.Black
+                        )
+                    }
+                )
+
             }
         )
     } else if (currentRoute in screensWithBottomNavAttendant) {
