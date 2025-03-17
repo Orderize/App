@@ -5,19 +5,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
-import com.orderize.orderize.ui.history.ordersHistory
+import com.orderize.orderize.ui.history.History
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
 import com.orderize.orderize.ui.orderdetails.OrderDetailsViewModel
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeScreen
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeViewModel
-import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloScreenUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -62,8 +63,8 @@ fun OrderizeNavigation() {
                 )
             }
 
-            composable(Routes.Historico.route) {
-                ordersHistory(navController = navController, modifier = Modifier.padding(innerPadding))
+            composable(Routes.History.route) {
+                History(navController = navController, modifier = Modifier.padding(innerPadding))
             }
         })
     }

@@ -1,9 +1,5 @@
 package com.orderize.orderize.ui.history
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -33,53 +28,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
-import com.orderize.orderize.ui.common.component.BottomNavBar
-import com.orderize.orderize.ui.theme.OrderizeTheme
 
-class ordersHistory(navController: NavHostController, modifier: Modifier) : ComponentActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            enableEdgeToEdge()
-            setContent {
-                OrderizeTheme {
-                    val navController = rememberNavController()
-                    Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
-                        BottomNavBar(
-                            navController = navController,
-                            loginType = null
-                        )
-                    }) { innerPadding ->
-                        Column(modifier = Modifier.padding(innerPadding)) {
-                            Historico(modifier = Modifier.weight(1f))
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-
-    @Preview(showBackground = true)
+@Preview(showBackground = true)
     @Composable
     private fun HistoricoPrev(){
-        Historico()
+        val navController = rememberNavController()
+        History(navController)
     }
 
     @Composable
-    fun Historico(modifier: Modifier = Modifier){
-        var valorPesquisa = remember { mutableStateOf("") }
+    fun History(
+        navController: NavController,
+        modifier: Modifier = Modifier
+    ){
+        val valorPesquisa = remember { mutableStateOf("") }
         Column (modifier = modifier
             .fillMaxSize()
             .background(Color(0xFF7B806A))
-            .padding(16.dp)
         ){
             Spacer(Modifier.height(10.dp))
             TextField(
                 value = valorPesquisa.value,
-
                 label = {
                     Text(text = "Pesquise...")
                 },

@@ -1,8 +1,6 @@
 package com.orderize.orderize.ui.common.component
 
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -16,9 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
-import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.navigation.Routes
-import com.orderize.orderize.ui.theme.mossGreen
 import com.orderize.orderize.ui.theme.orderizeGray
 
 @Composable
@@ -29,7 +25,7 @@ fun BottomNavBar(
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     Log.i("BottomNavBar", "rota atual $currentRoute")
-    val screensWithBottomNavPizzaiolo = listOf(Routes.HomePizzaiolo.route)
+    val screensWithBottomNavPizzaiolo = listOf(Routes.HomePizzaiolo.route, Routes.History.route)
     val screensWithBottomNavAttendant = emptyList<String>()
 
     if (currentRoute in screensWithBottomNavPizzaiolo) {
@@ -67,13 +63,32 @@ fun BottomNavBar(
                 )
                 NavigationBarItem(
                     selected = false,
-                    onClick = {},
-                    icon = { Icon(
-                        painterResource(R.drawable.ic_history_default),
-                        contentDescription = "Ícone de Histórico não selecionado",
-                        tint = Color.Unspecified
-                    ) },
-                    label = { Text("Histórico", color = Color.Black) }
+                    onClick = {
+                        if (currentRoute != Routes.History.route)
+                            navController.navigate(Routes.History.route)
+                    },
+                    icon = {
+                        if (currentRoute != Routes.History.route) {
+                            Icon(
+                                painterResource(R.drawable.ic_history_default),
+                                contentDescription = "Ícone de Histórico não selecionado",
+                                tint = Color.Unspecified
+                            )
+                        } else {
+                            Icon(
+                                painterResource(R.drawable.ic_history_red),
+                                contentDescription = "Ícone de Histórico não selecionado",
+                                tint = Color.Unspecified
+                            )
+                        }
+                           },
+                    label = {
+                        if (currentRoute != Routes.History.route) {
+                            Text("Histórico", color = Color.Black)
+                        } else {
+                            Text("Histórico", color = Color.Red)
+                        }
+                    }
                 )
                 NavigationBarItem(
                     selected = false,
@@ -84,35 +99,6 @@ fun BottomNavBar(
                         tint = Color.Unspecified
                     ) },
                     label = { Text("Perfil", color = Color.Black) }
-                )
-
-                NavigationBarItem(
-                    selected = currentRoute == Routes.Historico.route,
-                    onClick = {
-                        if (currentRoute != Routes.Historico.route)
-                            navController.navigate(Routes.Historico.route)
-                    },
-                    icon = {
-                        if (currentRoute != Routes.Historico.route) {
-                            Icon(
-                                painterResource(R.drawable.ic_history_default),
-                                contentDescription = "Ícone de Histórico não selecionado",
-                                tint = Color.Unspecified
-                            )
-                        } else {
-                            Icon(
-                                painterResource(R.drawable.ic_history_red),
-                                contentDescription = "Ícone de Histórico selecionado",
-                                tint = Color.Unspecified
-                            )
-                        }
-                    },
-                    label = {
-                        Text(
-                            "Histórico",
-                            color = if (currentRoute == Routes.Historico.route) Color.Red else Color.Black
-                        )
-                    }
                 )
 
             }
