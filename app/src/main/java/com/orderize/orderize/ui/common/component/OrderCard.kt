@@ -1,6 +1,7 @@
 package com.orderize.orderize.ui.common.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -25,27 +27,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.orderize.orderize.R
 import com.orderize.orderize.model.MockOrder
-import com.orderize.orderize.ui.theme.orderizeGray
 import com.orderize.orderize.ui.theme.strokeGray
 import java.time.LocalTime
 
-// TODO: CARD INCOMPLETO
 @Composable
 fun OrderCard(
     item: MockOrder,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCardClick: (MockOrder) -> Unit = {}
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .height(100.dp)
             .border(1.dp, strokeGray, RoundedCornerShape(20.dp)),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-
+        onClick = { onCardClick(item) }
     ) {
         Row(
             modifier = Modifier
@@ -56,6 +55,7 @@ fun OrderCard(
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
+                    .weight(1f)
             ) {
                 Text(
                     modifier = Modifier
@@ -92,7 +92,38 @@ fun OrderCard(
                 }
             }
 
-            Column {  }
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = item.status,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(
+                            color = item.statusColor(),
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(vertical = 6.dp, horizontal = 12.dp)
+                )
+
+                if (item.isSallon()) {
+                    Image(
+                        modifier = Modifier
+                            .size(60.dp),
+                        painter = painterResource(R.drawable.ic_table),
+                        contentDescription = "Ícone de pedido salão"
+                    )
+                } else {
+                    Image(
+                        modifier = Modifier
+                            .size(60.dp),
+                        painter = painterResource(R.drawable.ic_motorcycle),
+                        contentDescription = "Ícone de pedido delivery"
+                    )
+                }
+            }
         }
     }
 }

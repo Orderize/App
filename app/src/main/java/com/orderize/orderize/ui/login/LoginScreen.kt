@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,14 +22,18 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,7 +75,7 @@ fun LoginScreen(
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
+        val focusRequesterPassword = remember { FocusRequester() }
         val email = state.email
         val password = state.password
         val alertPhrase = state.alertPhrase
@@ -113,7 +119,13 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
-                .shadow(elevation = 4.dp, shape = RoundedCornerShape(26.dp))
+                .shadow(elevation = 4.dp, shape = RoundedCornerShape(26.dp)),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = { focusRequesterPassword.requestFocus() }
+            )
         )
 
         Spacer(modifier = Modifier.size(24.dp))
@@ -136,6 +148,13 @@ fun LoginScreen(
                 .padding(horizontal = 32.dp)
                 .fillMaxWidth()
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(26.dp))
+                .focusRequester(focusRequesterPassword),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { state.onLoginButtonClicked(email, password) }
+            )
         )
 
         if (state.isAlertPhraseNotBlank()) {
