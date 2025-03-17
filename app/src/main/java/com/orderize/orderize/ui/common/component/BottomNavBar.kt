@@ -1,6 +1,7 @@
 package com.orderize.orderize.ui.common.component
 
 import android.util.Log
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -20,7 +22,7 @@ import com.orderize.orderize.ui.theme.orderizeGray
 @Composable
 fun BottomNavBar(
     navController: NavController,
-    loginType: Int?,
+    loginType: Int? = null,
     modifier: Modifier = Modifier
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -43,13 +45,17 @@ fun BottomNavBar(
                             Icon(
                                 painterResource(R.drawable.ic_pizza_default),
                                 contentDescription = "Ícone de Pizza não selecionado",
-                                tint = Color.Unspecified
+                                tint = Color.Unspecified,
+                                modifier = Modifier
+                                    .size(34.dp)
                             )
                         } else {
                             Icon(
                                 painterResource(R.drawable.ic_pizza_red),
                                 contentDescription = "Ícone de Pizza selecionado",
-                                tint = Color.Unspecified
+                                tint = Color.Unspecified,
+                                modifier = Modifier
+                                    .size(34.dp)
                             )
                         }
                     },
@@ -62,7 +68,7 @@ fun BottomNavBar(
                     }
                 )
                 NavigationBarItem(
-                    selected = false,
+                    selected = currentRoute == Routes.History.route,
                     onClick = {
                         if (currentRoute != Routes.History.route)
                             navController.navigate(Routes.History.route)
@@ -72,13 +78,17 @@ fun BottomNavBar(
                             Icon(
                                 painterResource(R.drawable.ic_history_default),
                                 contentDescription = "Ícone de Histórico não selecionado",
-                                tint = Color.Unspecified
+                                tint = Color.Unspecified,
+                                modifier = Modifier
+                                    .size(34.dp)
                             )
                         } else {
                             Icon(
                                 painterResource(R.drawable.ic_history_red),
                                 contentDescription = "Ícone de Histórico não selecionado",
-                                tint = Color.Unspecified
+                                tint = Color.Unspecified,
+                                modifier = Modifier
+                                    .size(34.dp)
                             )
                         }
                            },
@@ -96,7 +106,9 @@ fun BottomNavBar(
                     icon = { Icon(
                         painterResource(R.drawable.ic_profile_default),
                         contentDescription = "Ícone de Perfil não selecionado",
-                        tint = Color.Unspecified
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .size(34.dp)
                     ) },
                     label = { Text("Perfil", color = Color.Black) }
                 )
