@@ -1,8 +1,13 @@
+import java.io.FileInputStream
+import java.io.IOException
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -17,6 +22,21 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val orderizeBaseUrlTag = "ORDERIZE_BASE_URL"
+        var orderizeBaseUrl = ""
+        try {
+            val props = Properties()
+            props.load(FileInputStream(File("$rootDir/local.properties")))
+            orderizeBaseUrl = props[orderizeBaseUrlTag].toString()
+        } catch (ignored: IOException) {
+            orderizeBaseUrl = System.getenv(orderizeBaseUrlTag)
+        }
+
+        if (orderizeBaseUrl.isBlank()) {
+            throw GradleException("ORDERIZE_BASE_URL não encontrada")
+        }
+        buildConfigField("String", orderizeBaseUrlTag, "\"$orderizeBaseUrl\"")
     }
 
     buildTypes {
@@ -37,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -62,20 +83,22 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     //retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation(libs.retrofit)
 
     //GSON
-    implementation ("com.google.code.gson:gson:2.12.0")
+    implementation (libs.gson)
 
     //room
-    implementation("androidx.room:room-runtime:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     //koin
-    implementation("io.insert-koin:koin-core:4.0.2")
-    implementation("io.insert-koin:koin-android:4.0.2")
-    implementation("io.insert-koin:koin-androidx-compose:4.0.2")
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 //    implementation("io.insert-koin:koin-androidx-viewmodel:4.0.0")
+
+    implementation(libs.kotlinx.serialization.json)
 
 }

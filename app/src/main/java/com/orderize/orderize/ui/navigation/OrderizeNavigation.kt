@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.history.History
@@ -36,36 +37,31 @@ fun OrderizeNavigation() {
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        NavHost(navController = navController, startDestination = Routes.Login.route, builder = {
-            composable(Routes.Login.route) {
+        NavHost (navController = navController, startDestination = LoginRoute) {
+            composable<LoginRoute> {
                 val viewModel: LoginViewModel = koinViewModel()
                 LoginScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding), navController = navController)
             }
 
-            composable(
-                Routes.HomePizzaiolo.route,
-            ) {
+            composable<HomePizzaioloRoute> {
                 val viewModel: PizzaioloHomeViewModel = koinViewModel()
                 PizzaioloHomeScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
             }
 
-            composable(
-                Routes.OrderDetails.route,
-                arguments = listOf(navArgument("itemId") { type = NavType.LongType })
-            ) { navBackStackEntry ->
-                val itemId = navBackStackEntry.arguments?.getLong("itemId") ?: 0L
+            composable<OrderDetailsRoute> { navBackStackEntry ->
+                val arguments = navBackStackEntry.toRoute<OrderDetailsRoute>()
                 val viewModel: OrderDetailsViewModel = koinViewModel()
                 OrderDetailsScreen(
                     viewModel = viewModel,
-                    itemId = itemId,
+                    itemId = arguments.itemId,
                     navController = navController,
                     modifier = Modifier.padding(innerPadding)
                 )
             }
 
-            composable(Routes.History.route) {
+            composable<HistoryRoute> {
                 History(navController = navController, modifier = Modifier.padding(innerPadding))
             }
-        })
+        }
     }
 }

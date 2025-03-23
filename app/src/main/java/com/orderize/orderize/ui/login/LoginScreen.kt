@@ -42,7 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
-import com.orderize.orderize.ui.navigation.Routes
+import com.orderize.orderize.ui.navigation.HomePizzaioloRoute
+import com.orderize.orderize.ui.navigation.LoginRoute
 import com.orderize.orderize.ui.theme.mossGreen
 
 @Composable
@@ -216,8 +217,8 @@ fun LoginScreen(
 
         if (state.userLogged) {
             if (state.userType == 1) {
-                navController.navigate(Routes.HomePizzaiolo.route) {
-                    popUpTo(Routes.Login.route) { inclusive = true }
+                navController.navigate(HomePizzaioloRoute) {
+                    popUpTo(LoginRoute) { inclusive = true }
                     launchSingleTop = true
                 }
             }

@@ -17,9 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.ui.common.component.OrderCard
-import com.orderize.orderize.ui.navigation.Routes
+import com.orderize.orderize.ui.navigation.OrderDetailsRoute
 import com.orderize.orderize.ui.theme.backgroundGreen
-import com.orderize.orderize.ui.theme.mossGreen
 
 @Composable
 fun PizzaioloHomeScreen(
@@ -55,7 +54,11 @@ fun PizzaioloHomeScreen(
                     .fillMaxWidth()
                     .height(100.dp),
                 onCardClick = {
-                    navController.navigate(Routes.OrderDetails.createRoute(itemId = it.id))
+                    navController.navigate(
+                        OrderDetailsRoute(
+                            itemId = it.id
+                        )
+                    )
                 }
             )
         }
