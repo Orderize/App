@@ -106,7 +106,8 @@ fun OrderDetailsScreen(
                         text = "Concluir",
                         fontSize = 22.sp,
                         modifier = Modifier
-                            .padding(vertical = 10.dp)
+                            .padding(vertical = 10.dp),
+                        color = Color.White
                     )
                 }
             }

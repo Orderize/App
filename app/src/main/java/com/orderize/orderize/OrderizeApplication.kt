@@ -1,6 +1,7 @@
 package com.orderize.orderize
 
 import android.app.Application
+import android.util.Log
 import com.orderize.orderize.di.module.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -10,6 +11,7 @@ class OrderizeApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.i("Application", "api url = ${BuildConfig.ORDERIZE_BASE_URL}")
 
         startKoin {
             androidLogger()
