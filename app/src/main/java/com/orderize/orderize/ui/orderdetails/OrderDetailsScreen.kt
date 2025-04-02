@@ -1,6 +1,5 @@
 package com.orderize.orderize.ui.orderdetails
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +42,7 @@ fun OrderDetailsScreen(
     OrderDetailsScreen(
         state = state,
         navController = navController,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -51,7 +50,7 @@ fun OrderDetailsScreen(
 fun OrderDetailsScreen(
     state: OrderDetailsUiState = OrderDetailsUiState(),
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -91,45 +90,46 @@ fun OrderDetailsScreen(
             }
         }
 
-        when (state.order.status) {
-            "Em Preparo" -> {
-                Button(
-                    onClick = state.onShowConfirmationDialogChange,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = darkerMossGreen
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    enabled = state.isFinishButtonEnabled
-                ) {
-                    Text(
-                        text = "Concluir",
-                        fontSize = 22.sp,
+            when (state.order.status) {
+                "Em Preparo" -> {
+                    Button(
+                        onClick = state.onShowConfirmationDialogChange,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = darkerMossGreen
+                        ),
                         modifier = Modifier
-                            .padding(vertical = 10.dp),
-                        color = Color.White
-                    )
+                            .fillMaxWidth(),
+                        enabled = state.isFinishButtonEnabled
+                    ) {
+                        Text(
+                            text = "Concluir",
+                            fontSize = 22.sp,
+                            modifier = Modifier
+                                .padding(vertical = 10.dp),
+                            color = Color.White
+                        )
+                    }
+                }
+
+                "Pendente" -> {
+                    Button(
+                        onClick = state.onShowConfirmationDialogChange,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = darkerMossGreen
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Iniciar",
+                            fontSize = 22.sp,
+                            modifier = Modifier
+                                .padding(vertical = 10.dp),
+                            color = Color.White
+                        )
+                    }
                 }
             }
-            "Pendente" -> {
-                Button(
-                    onClick = state.onShowConfirmationDialogChange,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = darkerMossGreen
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Iniciar",
-                        fontSize = 22.sp,
-                        modifier = Modifier
-                            .padding(vertical = 10.dp),
-                        color = Color.White
-                    )
-                }
-            }
-        }
 
         if (state.showConfirmationDialog) {
             if (state.order.status == "Pendente") {

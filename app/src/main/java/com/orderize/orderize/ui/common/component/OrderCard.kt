@@ -34,7 +34,8 @@ import java.time.LocalTime
 fun OrderCard(
     item: MockOrder,
     modifier: Modifier = Modifier,
-    onCardClick: (MockOrder) -> Unit = {}
+    onCardClick: (MockOrder) -> Unit = {},
+    showStatus: Boolean = true
 ) {
     Card(
         modifier = modifier
@@ -97,16 +98,18 @@ fun OrderCard(
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = item.status,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(
-                            color = item.statusColor(),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .padding(vertical = 6.dp, horizontal = 12.dp)
-                )
+                if (showStatus) {
+                    Text(
+                        text = item.status,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(
+                                color = item.statusColor(),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(vertical = 6.dp, horizontal = 12.dp)
+                    )
+                }
 
                 if (item.isSallon()) {
                     Image(
