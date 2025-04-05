@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /local.properties
+ORDERIZE_BASE_URL=http://34.193.137.219:80/api/
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
@@ -13,7 +14,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+ORDERIZE_BASE_URL=http://34.193.137.219:80/api/
 /key/
 /app/release/
 /app/debug/
 /.kotlin/
+
+

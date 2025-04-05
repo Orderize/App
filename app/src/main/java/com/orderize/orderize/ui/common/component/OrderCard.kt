@@ -29,12 +29,14 @@ import com.orderize.orderize.R
 import com.orderize.orderize.model.MockOrder
 import com.orderize.orderize.ui.theme.strokeGray
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun OrderCard(
     item: MockOrder,
     modifier: Modifier = Modifier,
-    onCardClick: (MockOrder) -> Unit = {}
+    onCardClick: (MockOrder) -> Unit = {},
+    showStatus: Boolean = true
 ) {
     Card(
         modifier = modifier
@@ -74,21 +76,36 @@ fun OrderCard(
                             .size(50.dp)
                             .offset(x = -12.dp),
                         painter = painterResource(R.drawable.ic_gray_clock),
-                        contentDescription = "Clock"
+                        contentDescription = "Ícone de relógio"
                     )
-
-                    Text(
+                    Row(
                         modifier = Modifier
                             .weight(1f)
-                            .offset(
-                                x = -22.dp,
-                                y = 2.dp
-                            ),
-                        text = "${item.createdTime}",
-                        color = strokeGray,
-                        fontSize = 24.sp,
-                    )
+                            .offset(x = -22.dp, y = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${item.createdTime}",
+                            color = strokeGray,
+                            fontSize = 24.sp,
+                        )
 
+                        if (!showStatus) {
+                            Image(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .padding(horizontal = 4.dp),
+                                painter = painterResource(R.drawable.calendar),
+                                contentDescription = "Ícone de calendário"
+                            )
+
+                            Text(
+                                text = item.createdDate.format(DateTimeFormatter.ofPattern("dd/MM")),
+                                color = strokeGray,
+                                fontSize = 24.sp,
+                            )
+                        }
+                    }
                 }
             }
 
@@ -97,16 +114,18 @@ fun OrderCard(
                     .fillMaxHeight(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = item.status,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(
-                            color = item.statusColor(),
-                            shape = RoundedCornerShape(20.dp)
-                        )
-                        .padding(vertical = 6.dp, horizontal = 12.dp)
-                )
+                if (showStatus) {
+                    Text(
+                        text = item.status,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(
+                                color = item.statusColor(),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .padding(vertical = 6.dp, horizontal = 12.dp)
+                    )
+                }
 
                 if (item.isSallon()) {
                     Image(

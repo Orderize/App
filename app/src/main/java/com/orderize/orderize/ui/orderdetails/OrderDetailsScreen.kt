@@ -1,6 +1,5 @@
 package com.orderize.orderize.ui.orderdetails
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,14 +35,16 @@ fun OrderDetailsScreen(
     viewModel: OrderDetailsViewModel,
     itemId: Long,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showStatus: Boolean = true
 ) {
     val state by viewModel.uiState.collectAsState()
     viewModel.findOrderById(itemId)
     OrderDetailsScreen(
         state = state,
         navController = navController,
-        modifier = modifier
+        modifier = modifier,
+        showStatus = showStatus
     )
 }
 
@@ -51,7 +52,8 @@ fun OrderDetailsScreen(
 fun OrderDetailsScreen(
     state: OrderDetailsUiState = OrderDetailsUiState(),
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showStatus: Boolean = true
 ) {
     Column(
         modifier = modifier
@@ -71,7 +73,8 @@ fun OrderDetailsScreen(
                     item = state.order,
                     Modifier
                         .height(100.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    showStatus = showStatus
                 )
             }
 
@@ -91,45 +94,46 @@ fun OrderDetailsScreen(
             }
         }
 
-        when (state.order.status) {
-            "Em Preparo" -> {
-                Button(
-                    onClick = state.onShowConfirmationDialogChange,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = darkerMossGreen
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    enabled = state.isFinishButtonEnabled
-                ) {
-                    Text(
-                        text = "Concluir",
-                        fontSize = 22.sp,
+            when (state.order.status) {
+                "Em Preparo" -> {
+                    Button(
+                        onClick = state.onShowConfirmationDialogChange,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = darkerMossGreen
+                        ),
                         modifier = Modifier
-                            .padding(vertical = 10.dp),
-                        color = Color.White
-                    )
+                            .fillMaxWidth(),
+                        enabled = state.isFinishButtonEnabled
+                    ) {
+                        Text(
+                            text = "Concluir",
+                            fontSize = 22.sp,
+                            modifier = Modifier
+                                .padding(vertical = 10.dp),
+                            color = Color.White
+                        )
+                    }
+                }
+
+                "Pendente" -> {
+                    Button(
+                        onClick = state.onShowConfirmationDialogChange,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = darkerMossGreen
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Iniciar",
+                            fontSize = 22.sp,
+                            modifier = Modifier
+                                .padding(vertical = 10.dp),
+                            color = Color.White
+                        )
+                    }
                 }
             }
-            "Pendente" -> {
-                Button(
-                    onClick = state.onShowConfirmationDialogChange,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = darkerMossGreen
-                    ),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Iniciar",
-                        fontSize = 22.sp,
-                        modifier = Modifier
-                            .padding(vertical = 10.dp),
-                        color = Color.White
-                    )
-                }
-            }
-        }
 
         if (state.showConfirmationDialog) {
             if (state.order.status == "Pendente") {
@@ -164,5 +168,6 @@ fun OrderDetailsScreen(
 @Composable
 private fun OrderDetailsScreenPreview() {
     val navController = rememberNavController()
-    OrderDetailsScreen(navController = navController)
+    OrderDetailsScreen(navController = navController, showStatus = false
+    )
 }

@@ -13,7 +13,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
-import com.orderize.orderize.ui.history.History
+import com.orderize.orderize.ui.history.HistoryOrdersScreen
+import com.orderize.orderize.ui.history.HistoryViewModel
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
@@ -55,12 +56,13 @@ fun OrderizeNavigation() {
                     viewModel = viewModel,
                     itemId = arguments.itemId,
                     navController = navController,
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding),
+                    showStatus = arguments.showStatus
                 )
             }
 
             composable<HistoryRoute> {
-                History(navController = navController, modifier = Modifier.padding(innerPadding))
+                HistoryOrdersScreen(navController = navController, modifier = Modifier.padding(innerPadding), viewModel = HistoryViewModel())
             }
         }
     }
