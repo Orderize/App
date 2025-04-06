@@ -4,11 +4,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.Modifier
@@ -55,7 +59,7 @@ fun WriteOrderScreen(
                         contentDescription = "Balão 01",
                         modifier = Modifier
                             .size(350.dp)
-                            .padding(top = 30.dp)
+                            .padding(top = 40.dp)
                     )
 
                     Text(
@@ -98,6 +102,57 @@ fun WriteOrderScreen(
                             disabledIndicatorColor = Color.Transparent
                         )
                     )
+                }
+            }
+            
+            item{
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+
+                    Image(
+                        painter = painterResource(R.drawable.baloon_02),
+                        contentDescription = "Balão 01",
+                        modifier = Modifier
+                            .size(350.dp)
+                            .padding(top = 30.dp)
+                            .align(Alignment.TopEnd)
+                    )
+
+                    Text(
+                        text = "Resultado:",
+                        color = Color(0xFFFFFFFF),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .offset(y = 70.dp)
+                            .padding(start = 80.dp)
+
+                    )
+                }
+            }
+
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        onClick = {},
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(250.dp),
+                        shape = RoundedCornerShape(30),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFEAE5DE),
+                            contentColor = Color.Black
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                    ) {
+                        Text("Próximo >>")
+                    }
                 }
             }
         }
