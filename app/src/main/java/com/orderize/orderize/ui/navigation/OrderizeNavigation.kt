@@ -13,6 +13,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
+import com.orderize.orderize.ui.heatmap.HeatmapScreen
+import com.orderize.orderize.ui.heatmap.HeatmapViewModel
 import com.orderize.orderize.ui.history.History
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
@@ -61,6 +63,11 @@ fun OrderizeNavigation() {
 
             composable<HistoryRoute> {
                 History(navController = navController, modifier = Modifier.padding(innerPadding))
+            }
+
+            composable<HeatmapRoute> {
+                val viewModel:HeatmapViewModel = koinViewModel()
+                HeatmapScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
             }
         }
     }
