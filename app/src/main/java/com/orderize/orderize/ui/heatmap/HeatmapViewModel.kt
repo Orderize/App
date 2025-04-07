@@ -64,5 +64,15 @@ val mockTables = listOf(
         6,
         6,
         TableStatus.EM_PREPARO
+    ),
+    MockTable(
+        7,
+        7,
+        TableStatus.EM_PREPARO
+    ),
+    MockTable(
+        7,
+        7,
+        TableStatus.EM_PREPARO
     )
 )

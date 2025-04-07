@@ -1,9 +1,12 @@
 package com.orderize.orderize.ui.heatmap
 
+import com.orderize.orderize.ui.heatmap.components.DropdownRoomsFilters
+import com.orderize.orderize.ui.heatmap.components.StatusButton
+import com.orderize.orderize.ui.heatmap.components.Legend
+import com.orderize.orderize.ui.heatmap.components.CardTable
+
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,32 +14,31 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.orderize.orderize.model.MockTable
-import com.orderize.orderize.model.TableStatus
 import com.orderize.orderize.ui.navigation.OrderDetailsRoute
 import com.orderize.orderize.ui.theme.availableLightBeige
 import com.orderize.orderize.ui.theme.backgroundGreen
@@ -72,42 +74,44 @@ fun HeatmapScreen(
             .background(
                 color = backgroundGreen
             )
-            .padding(16.dp),
-//        verticalArrangement = Arrangement.Center
+            .padding(top = 34.dp, start = 16.dp, end = 16.dp)
     ) {
         Text(
             text = "Mapa de calor: mesas",
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(bottom = 8.dp),
-            color = textWhite
-//            fontSize = 24.sp,
-//            fontWeight = FontWeight.SemiBold,
+            color = textWhite,
+            fontWeight = FontWeight.SemiBold
         )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            DropdownRoomsFilters()
-            StatusButton()
-        }
+        FiltersRow()
 
         Card(
             colors = CardDefaults.cardColors(containerColor = darkerMossGreen),
             modifier = Modifier
-                .fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
                 .padding(bottom = 16.dp)
         ) {
-            Column(modifier = Modifier.padding(12.dp)) {
-                Text("Cores", color = textWhite)
-                Spacer(Modifier.height(8.dp))
-                Caption("Mesa com pedido pendente", pendingRed)
-                Caption("Mesa com pedido em preparo", preparingYellow)
-                Caption("Mesa disponível", availableLightBeige)
+            Column(modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+
+               Row(verticalAlignment = Alignment.CenterVertically) {
+                   Text("Cores | ", color = textWhite, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                   Legend("Pedido pendente", pendingRed)
+               }
+               Spacer(Modifier.height(8.dp))
+               Row(
+                   modifier = Modifier.fillMaxWidth(),
+                   horizontalArrangement = Arrangement.spacedBy(12.dp),
+               ) {
+                   Legend("Pedido em preparo", preparingYellow)
+                   Legend("Disponível", availableLightBeige)
+               }
             }
         }
+
+        Spacer(Modifier.width(8.dp))
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -139,51 +143,23 @@ private fun HeatmapScreenPreview() {
 }
 
 @Composable
-fun DropdownRoomsFilters() {
-    Button(onClick = { }) {
-        Text("Salão Principal")
-    }
-}
+fun FiltersRow() {
+    var selectedFilter by remember { mutableStateOf("salao") }
 
-@Composable
-fun StatusButton() {
-    Button(onClick = { }) {
-        Icon(Icons.Default.Menu, contentDescription = "Status")
-        Spacer(modifier = Modifier.width(4.dp))
-        Text("status")
-    }
-}
-
-@Composable
-fun Caption(texto: String, cor: Color) {
-    Row (
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 4.dp)
-    ){
-        Box(
-            modifier = Modifier
-                .size(16.dp)
-                .background(cor, shape = CircleShape)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = texto, color = textWhite)
-    }
-}
-
-@Composable
-fun CardTable(table: MockTable, onClick: (MockTable) -> Unit = {}) {
-    val clickable = table.status == TableStatus.PENDENTE || table.status == TableStatus.EM_PREPARO
-    Card (
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
-            .then(
-                if (clickable) Modifier.clickable { onClick(table) } else Modifier
-            ),
-        colors = CardDefaults.cardColors(containerColor = tableColorByStatus(table.status))
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(text = "Mesa ${table.number}", style = MaterialTheme.typography.bodyLarge)
-        }
+        DropdownRoomsFilters(
+            isSelected = selectedFilter == "salao",
+            onClick = { selectedFilter = "salao"},
+            modifier = Modifier.weight(1f))
+
+        StatusButton(
+            isSelected = selectedFilter == "status",
+            onClick = {selectedFilter = "status"},
+            modifier = Modifier.weight(1f))
     }
 }
