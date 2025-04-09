@@ -56,7 +56,8 @@ fun OrderizeNavigation() {
                     viewModel = viewModel,
                     itemId = arguments.itemId,
                     navController = navController,
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding),
+                    showStatus = arguments.showStatus
                 )
             }
 

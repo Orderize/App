@@ -56,7 +56,8 @@ fun HistoryOrdersScreen(
                         onCardClick = {
                             navController.navigate(
                                 OrderDetailsRoute(
-                                    itemId = it.id
+                                    itemId = it.id,
+                                    showStatus = false
                                 )
                             )
                         },

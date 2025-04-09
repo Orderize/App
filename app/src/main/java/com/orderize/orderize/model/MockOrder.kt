@@ -3,6 +3,7 @@ package com.orderize.orderize.model
 import androidx.compose.ui.graphics.Color
 import com.orderize.orderize.ui.theme.pendingRed
 import com.orderize.orderize.ui.theme.preparingYellow
+import java.time.LocalDate
 import java.time.LocalTime
 
 data class MockOrder(
@@ -10,6 +11,7 @@ data class MockOrder(
     val type: String = "Salão",
     val status: String = "Pendente",
     val createdTime: LocalTime = LocalTime.of(12, 0),
+    val createdDate: LocalDate = LocalDate.of(2025, 4, 5),
     val items: List<MockPizza> = listOf(
         MockPizza(), MockPizza(
             qtt = 1,

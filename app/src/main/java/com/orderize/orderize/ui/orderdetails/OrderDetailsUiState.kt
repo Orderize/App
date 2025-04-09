@@ -11,7 +11,10 @@ data class OrderDetailsUiState(
     var showConfirmationDialog: Boolean = false,
     val onShowConfirmationDialogChange: () -> Unit = { },
     val orderFinished: Boolean = false,
-    val onCheckBoxClicked: (MockPizza) -> Unit = {}
+    val onCheckBoxClicked: (MockPizza) -> Unit = {},
+    val showSnackbar: Boolean = false,
+    val snackbarMessage: String = "foi iniciado"
+
 ) {
     val isFinishButtonEnabled = order.items.filter { it.isChecked == false }.isEmpty()
     val showCheckBox = order.status != "Pendente"

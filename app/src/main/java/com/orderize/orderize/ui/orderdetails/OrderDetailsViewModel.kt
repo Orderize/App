@@ -26,7 +26,10 @@ class OrderDetailsViewModel: ViewModel() {
                     _uiState.update {
                         it.copy(
                             order = it.order.copy(status = "Em Preparo"),
-                            showConfirmationDialog = !it.showConfirmationDialog
+                           // showConfirmationDialog = !it.showConfirmationDialog
+                            showConfirmationDialog = false,
+                            showSnackbar = true,
+                            snackbarMessage = "foi iniciado"
                         )
                     }
                 },
@@ -36,8 +39,11 @@ class OrderDetailsViewModel: ViewModel() {
                             order = it.order.copy(
                                 status = "Finalizado"
                             ),
-                            showConfirmationDialog = !it.showConfirmationDialog,
-                            orderFinished = true
+                            //showConfirmationDialog = !it.showConfirmationDialog,
+                            showConfirmationDialog = false,
+                            showSnackbar = true,
+                            orderFinished = true,
+                            snackbarMessage = "foi concluído"
                         )
                     }
                 },
@@ -61,6 +67,13 @@ class OrderDetailsViewModel: ViewModel() {
             )
         }
     }
+
+    fun hideSnackbar() {
+        _uiState.update {
+            it.copy(showSnackbar = false)
+        }
+    }
+
 
     fun findOrderById(itemId: Long) {
         // TODO: Buscar o item no back e setar no state, para ser utilizado na tela
