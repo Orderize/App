@@ -1,40 +1,52 @@
-package com.orderize.orderize.ui.writeOrder
+package com.orderize.orderize.ui.drinks
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.theme.backgroundGreen
 
 
+
 @Composable
-fun WriteOrderScreen(
-    viewModel: writeOrderViewModel = writeOrderViewModel(),
+fun DrinkScreen(
+    viewModel: DrinkViewModel = DrinkViewModel(),
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val textUiState = viewModel.uiState
+    var text by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -51,7 +63,7 @@ fun WriteOrderScreen(
             item {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
 
                     Image(
@@ -62,52 +74,34 @@ fun WriteOrderScreen(
                             .padding(top = 40.dp)
                     )
 
-                    Text(
-                        text = "Digite seu pedido:",
-                        color = Color(0xFF3A3A2D),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                    Row(
                         modifier = Modifier
-                            .offset(y = 70.dp)
-                            .padding(start = 32.dp)
-
-                    )
-
-                    Divider(
-                        color = Color(0xFFFFFFFF),
-                        thickness = 1.dp,
-                        modifier = Modifier
-                            .padding(vertical = 10.dp)
-                            .offset(y = 100.dp)
-                            .width(350.dp)
-                    )
-
-                    TextField(
-                        value = textUiState.text,
-                        onValueChange = { viewModel.onTextChange(it) },
-                        textStyle = TextStyle(
-                            fontSize = 20.sp,
-                            color = Color.Black),
-                        modifier = Modifier
-                            .width(350.dp)
-                            .height(150.dp)
-                            .offset(y = 130.dp)
-                            .fillMaxWidth(),
-                        placeholder = { Text("...") },
-                        maxLines = 5,
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent
+                            .padding(top = 50.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.drink),
+                            contentDescription = "refri",
+                            modifier = Modifier
+                                .size(200.dp)
+                                .padding(top = 60.dp)
                         )
-                    )
+
+                        Text(
+                            text = "Selecione uma bebida!",
+                            color = Color(0xFF3A3C16),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                                .offset(y = 25.dp)
+                                .padding(end = 70.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
-            
-            item{
+
+            item {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -120,16 +114,6 @@ fun WriteOrderScreen(
                             .size(350.dp)
                             .padding(top = 30.dp)
                             .align(Alignment.TopEnd)
-                    )
-
-                    Text(
-                        text = "Resultado:",
-                        color = Color(0xFFFFFFFF),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .offset(y = 70.dp)
-                            .padding(start = 80.dp)
 
                     )
                 }
@@ -153,7 +137,7 @@ fun WriteOrderScreen(
                         ),
                         elevation = ButtonDefaults.buttonElevation(4.dp)
                     ) {
-                        Text("Próximo >>")
+                        Text("Finalizar >>")
                     }
                 }
             }
@@ -163,10 +147,10 @@ fun WriteOrderScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewWriteOrderScreen() {
+private fun PreviewDrinkScreen() {
     val navController = rememberNavController()
-    WriteOrderScreen(
-        viewModel = writeOrderViewModel(),
+    DrinkScreen(
+        viewModel = DrinkViewModel(),
         navController = navController
     )
 }
