@@ -69,7 +69,7 @@ fun PreviewCustomSnackbar() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        contentAlignment = Alignment.BottomCenter
+        contentAlignment = Alignment.TopCenter
     ) {
         CustomSnackbar(orderNumber = 58)
     }
