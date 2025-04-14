@@ -11,6 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
+import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.ui.history.History
+import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
 import com.orderize.orderize.ui.login.LoginScreen
@@ -61,6 +64,12 @@ fun OrderizeNavigation() {
 
             composable<HistoryRoute> {
                 HistoryOrdersScreen(navController = navController, modifier = Modifier.padding(innerPadding), viewModel = HistoryViewModel())
+            }
+
+            composable<ForgotPasswordRoute> {
+                val viewModel: ForgotPasswordViewModel = koinViewModel()
+
+                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
             }
         }
     }
