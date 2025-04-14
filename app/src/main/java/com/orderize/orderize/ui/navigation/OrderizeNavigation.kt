@@ -5,17 +5,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
 import com.orderize.orderize.ui.history.History
 import com.orderize.orderize.ui.login.ForgotPasswordScreen
+import com.orderize.orderize.ui.history.HistoryOrdersScreen
+import com.orderize.orderize.ui.history.HistoryViewModel
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
@@ -57,12 +57,13 @@ fun OrderizeNavigation() {
                     viewModel = viewModel,
                     itemId = arguments.itemId,
                     navController = navController,
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding),
+                    showStatus = arguments.showStatus
                 )
             }
 
             composable<HistoryRoute> {
-                History(navController = navController, modifier = Modifier.padding(innerPadding))
+                HistoryOrdersScreen(navController = navController, modifier = Modifier.padding(innerPadding), viewModel = HistoryViewModel())
             }
 
             composable<ForgotPasswordRoute> {

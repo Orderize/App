@@ -101,4 +101,10 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
+
+    //Chucker
+    debugImplementation("com.github.chuckerteam.chucker:library:4.1.0")
+
 }

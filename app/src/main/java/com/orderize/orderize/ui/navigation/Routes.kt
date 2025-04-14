@@ -16,5 +16,6 @@ object HistoryRoute
 
 @Serializable
 data class OrderDetailsRoute(
-    val itemId: Long
+    val itemId: Long,
+    val showStatus: Boolean = true
 )
