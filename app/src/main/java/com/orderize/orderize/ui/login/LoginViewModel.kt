@@ -1,17 +1,29 @@
 package com.orderize.orderize.ui.login
 
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.orderize.orderize.di.module.repositoryModule
+import com.orderize.orderize.model.NetResource
+import com.orderize.orderize.repository.login.LoginRepository
+import com.orderize.orderize.repository.login.local.UserDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<LoginScreenUiState> = MutableStateFlow(LoginScreenUiState())
+    private val _uiState: MutableStateFlow<LoginScreenUiState> =
+        MutableStateFlow(LoginScreenUiState())
     val uiState get() = _uiState.asStateFlow()
 
     init {
+        verifyUserLogged()
+
         _uiState.update { currentState ->
             currentState.copy(
                 onEmailChange = {
@@ -53,18 +65,39 @@ class LoginViewModel: ViewModel() {
             return
         }
 
-        if (email.equals("zezinho@gmail.com") && password.equals("123")) {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    userLogged = true,
-                    userType = 1
-                )
+        viewModelScope.launch {
+            val loginResponse = loginRepository.login(email, password)
+            if (loginResponse is NetResource.Success) {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        userLogged = true,
+                        userType = if (loginResponse.data.role == "PIZZA_MAKER") 1 else 2
+                    )
+                }
+            } else {
+                Log.i(this.toString(), (loginResponse as NetResource.Fail).toString())
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        alertPhrase = loginResponse.message
+                    )
+                }
             }
-        } else {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    alertPhrase = "Login inváido, email ou senha incorretos!"
-                )
+        }
+    }
+
+    private fun verifyUserLogged() {
+        viewModelScope.launch {
+            val token = loginRepository.getApiToken()
+            if (token != null) {
+                val savedUser = loginRepository.getSavedUser(token)
+                if (savedUser != null) {
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            userLogged = true,
+                            userType = if (savedUser.role == "PIZZA_MAKER") 1 else 2
+                        )
+                    }
+                }
             }
         }
     }

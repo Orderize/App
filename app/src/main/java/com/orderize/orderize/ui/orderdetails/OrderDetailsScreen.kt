@@ -1,6 +1,7 @@
 package com.orderize.orderize.ui.orderdetails
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,8 +14,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +27,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.ui.common.component.BottomDialog
+import com.orderize.orderize.ui.common.component.CustomSnackbar
 import com.orderize.orderize.ui.common.component.OrderCard
 import com.orderize.orderize.ui.common.component.OrderItemsCard
 import com.orderize.orderize.ui.common.component.TopBar
@@ -35,14 +39,17 @@ fun OrderDetailsScreen(
     viewModel: OrderDetailsViewModel,
     itemId: Long,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showStatus: Boolean = true
 ) {
     val state by viewModel.uiState.collectAsState()
     viewModel.findOrderById(itemId)
     OrderDetailsScreen(
         state = state,
         navController = navController,
+        viewModel = viewModel,
         modifier = modifier,
+        showStatus = showStatus
     )
 }
 
@@ -50,7 +57,9 @@ fun OrderDetailsScreen(
 fun OrderDetailsScreen(
     state: OrderDetailsUiState = OrderDetailsUiState(),
     navController: NavController,
+    viewModel: OrderDetailsViewModel,
     modifier: Modifier = Modifier,
+    showStatus: Boolean = true
 ) {
     Column(
         modifier = modifier
@@ -70,7 +79,8 @@ fun OrderDetailsScreen(
                     item = state.order,
                     Modifier
                         .height(100.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    showStatus = showStatus
                 )
             }
 
@@ -157,6 +167,23 @@ fun OrderDetailsScreen(
         if (state.orderFinished) {
             navController.popBackStack()
         }
+
+        if (state.showSnackbar) {
+            LaunchedEffect(Unit) {
+                kotlinx.coroutines.delay(3000)
+                viewModel.hideSnackbar()
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 32.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                CustomSnackbar(orderNumber = state.order.id.toInt(),
+                    message = state.snackbarMessage)
+            }
+        }
+
     }
 }
 
@@ -164,5 +191,10 @@ fun OrderDetailsScreen(
 @Composable
 private fun OrderDetailsScreenPreview() {
     val navController = rememberNavController()
-    OrderDetailsScreen(navController = navController)
+    OrderDetailsScreen(
+        state = OrderDetailsUiState(),
+        navController = navController,
+        viewModel = OrderDetailsViewModel(),
+        showStatus = false
+    )
 }

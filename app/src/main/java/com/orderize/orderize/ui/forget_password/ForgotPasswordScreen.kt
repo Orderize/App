@@ -1,9 +1,5 @@
 package com.orderize.orderize.ui.login
 
-import android.content.pm.PackageManager
-import android.os.Build
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +20,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -33,10 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -45,34 +38,19 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
-import com.orderize.orderize.ui.navigation.HomePizzaioloRoute
-import com.orderize.orderize.ui.navigation.LoginRoute
+import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
 import com.orderize.orderize.ui.theme.mossGreen
 
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel,
+fun ForgotPasswordScreen(
+    viewModel: ForgotPasswordViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
-    LoginScreen(
-        state,
-        navController,
-        modifier
-    )
-}
-
-@Composable
-fun LoginScreen(
-    state: LoginScreenUiState = LoginScreenUiState(),
-    navController: NavController,
-    modifier: Modifier = Modifier
-) {
 
     Column(
         modifier = modifier
@@ -83,25 +61,18 @@ fun LoginScreen(
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val focusRequesterPassword = remember { FocusRequester() }
-        val email = state.email
-        val password = state.password
-        val alertPhrase = state.alertPhrase
-
         Image(
             painter = painterResource(R.drawable.img_title_orderize),
             contentDescription = "Title Orderize",
             modifier = Modifier
-                .size(
-                    size = 256.dp
-                )
+                .size(256.dp)
                 .padding(top = 164.dp)
         )
 
         Spacer(Modifier.size(32.dp))
 
         Text(
-            text = "Login",
+            text = "Recuperar Senha",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier,
@@ -109,6 +80,10 @@ fun LoginScreen(
         )
 
         Spacer(Modifier.size(22.dp))
+
+        val focusRequesterEmail = remember { FocusRequester() }
+        val email = state.email
+        val alertPhrase = state.alertPhrase
 
         TextField(
             value = email,
@@ -129,39 +104,10 @@ fun LoginScreen(
                 .padding(horizontal = 32.dp)
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(26.dp)),
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focusRequesterPassword.requestFocus() }
-            )
-        )
-
-        Spacer(modifier = Modifier.size(24.dp))
-
-        TextField(
-            value = password,
-            onValueChange = state.onPasswordChange,
-            label = { Text("Senha", color = Color.Black) },
-            shape = RoundedCornerShape(26.dp),
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .fillMaxWidth()
-                .shadow(elevation = 4.dp, shape = RoundedCornerShape(26.dp))
-                .focusRequester(focusRequesterPassword),
-            keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onDone = { state.onLoginButtonClicked(email, password) }
+                onDone = { state.onResetPasswordButtonClicked(email) }
             )
         )
 
@@ -181,22 +127,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        TextButton(
-            onClick = {
-                //TODO: Navegar para tela de esqueci a senha quando for criada
-            }
-        ) {
-            Text(
-                text = "Esqueci a senha",
-                textDecoration = TextDecoration.Underline,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-                )
-        }
-
-        Spacer(modifier = Modifier.size(24.dp))
-
         if (state.loading) {
             CircularProgressIndicator(
                 color = Color.Black,
@@ -205,7 +135,7 @@ fun LoginScreen(
             )
         } else {
             Button(
-                onClick = { state.onLoginButtonClicked(email, password) },
+                onClick = { state.onResetPasswordButtonClicked(email) },
                 modifier = Modifier
                     .widthIn(min = 200.dp)
                     .heightIn(min = 56.dp),
@@ -215,31 +145,37 @@ fun LoginScreen(
                 )
             ) {
                 Text(
-                    text = "Entrar",
+                    text = "Recuperar Senha",
                     fontSize = 20.sp,
                     color = Color.White
                 )
             }
         }
 
-        if (state.userLogged) {
-            if (state.userType == 1) {
-                navController.navigate(HomePizzaioloRoute) {
-                    popUpTo(LoginRoute) { inclusive = true }
-                    launchSingleTop = true
-                }
-            } else {
-                Toast.makeText(LocalContext.current, "Usuário identificado, login type 2", Toast.LENGTH_LONG).show()
-            }
-        }
+        Spacer(modifier = Modifier.size(24.dp))
 
+        TextButton(
+            onClick = {
+                // TODO: Navegar para tela de Login
+                navController.navigate("login_route") {
+                    popUpTo("forgot_password_route") { inclusive = true }
+                }
+            }
+        ) {
+            Text(
+                text = "Voltar para Login",
+                textDecoration = TextDecoration.Underline,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        }
     }
-    
 }
 
 @Preview(showSystemUi = true)
 @Composable
-private fun LoginScreenPreview(modifier: Modifier = Modifier) {
+private fun ForgotPasswordScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    LoginScreen(modifier = modifier, navController = navController)
+    ForgotPasswordScreen(modifier = modifier, navController = navController, viewModel = ForgotPasswordViewModel())
 }
