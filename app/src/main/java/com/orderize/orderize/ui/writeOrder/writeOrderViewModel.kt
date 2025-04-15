@@ -5,10 +5,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
-class writeOrderViewModel : ViewModel(){
+class writeOrderViewModel : ViewModel() {
     var uiState by mutableStateOf(writeOrderUiState())
         private set
 
-    fun onTextChange(newText: String){
+    fun onTextChange(newText: String) {
         uiState = uiState.copy(text = newText)
     }
+}
