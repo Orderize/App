@@ -1,31 +1,13 @@
 package com.orderize.orderize.ui.drinks
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.navigation.NavController
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,12 +15,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.theme.backgroundGreen
-
-
 
 @Composable
 fun DrinkScreen(
@@ -46,7 +27,11 @@ fun DrinkScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    var text by remember { mutableStateOf("") }
+    val state by viewModel.uiState.collectAsState()
+
+    val filteredItems = state.items.filter { drink ->
+        drink.first.contains(state.searchQuery, ignoreCase = true)
+    }
 
     Column(
         modifier = modifier
@@ -56,16 +41,13 @@ fun DrinkScreen(
         TopBar(navController = navController)
 
         LazyColumn(
-            modifier = modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-
                     Image(
                         painter = painterResource(R.drawable.baloon_01),
                         contentDescription = "Balão 01",
@@ -75,8 +57,7 @@ fun DrinkScreen(
                     )
 
                     Row(
-                        modifier = Modifier
-                            .padding(top = 50.dp),
+                        modifier = Modifier.padding(top = 50.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
@@ -103,30 +84,44 @@ fun DrinkScreen(
 
             item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-
                     Image(
                         painter = painterResource(R.drawable.baloon_02),
-                        contentDescription = "Balão 01",
+                        contentDescription = "Balão 02",
                         modifier = Modifier
                             .size(350.dp)
                             .padding(top = 30.dp)
                             .align(Alignment.TopEnd)
-
                     )
+
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(top = 100.dp, end = 30.dp)
+                            .width(300.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        SearchBar(
+                            value = state.searchQuery,
+                            onValueChange = viewModel::updateSearchQuery,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        filteredItems.forEach { drink ->
+                            DrinkCard(name = drink.first, price = drink.second)
+                        }
+                    }
                 }
             }
 
             item {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     Button(
-                        onClick = {},
+                        onClick = { },
                         modifier = Modifier
                             .height(60.dp)
                             .width(250.dp),
@@ -142,6 +137,62 @@ fun DrinkScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SearchBar(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = { Text("Pesquise...", color = Color.White) },
+        leadingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.iconlupa),
+                contentDescription = "Ícone de busca",
+                tint = Color.White
+            )
+        },
+        shape = RoundedCornerShape(10.dp),
+        modifier = modifier
+            .height(60.dp)
+            .background(Color.Transparent, shape = RoundedCornerShape(15.dp))
+            .border(2.dp, Color.White, RoundedCornerShape(15.dp)),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        ),
+        singleLine = true
+    )
+}
+
+@Composable
+fun DrinkCard(name: String, price: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 4.dp)
+            .background(Color(0xFFEAE5DE), shape = RoundedCornerShape(12.dp))
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = name,
+            color = Color(0xFF3A3C16),
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+        Text(
+            text = price,
+            color = Color(0xFF3A3C16),
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
     }
 }
 
