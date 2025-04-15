@@ -88,6 +88,7 @@ fun WriteOrderScreen(
                         textStyle = TextStyle(
                             fontSize = 20.sp,
                             color = Color.Black),
+
                         modifier = Modifier
                             .width(350.dp)
                             .height(150.dp)

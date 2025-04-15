@@ -12,4 +12,3 @@ class writeOrderViewModel : ViewModel(){
     fun onTextChange(newText: String){
         uiState = uiState.copy(text = newText)
     }
-}
