@@ -13,7 +13,8 @@ class DrinkViewModel : ViewModel() {
                 "Sprite, 600ml" to "R$5,40",
                 "Guaraná, 2L" to "R$13,00",
                 "Fanta-laranja, 600ml" to "R$4,00",
-                "Fanta-uva, 600ml" to "R$4,00"
+                "Fanta-uva, 600ml" to "R$4,00",
+                "Suco de laranja, 600ml" to "R$4,00"
             )
         )
     )
@@ -21,5 +22,15 @@ class DrinkViewModel : ViewModel() {
 
     fun updateSearchQuery(newQuery: String) {
         _uiState.value = _uiState.value.copy(searchQuery = newQuery)
+    }
+
+    fun toggleDrinkSelection(drink: String) {
+        val currentList = _uiState.value.selectedDrinks.toMutableList()
+        if (currentList.contains(drink)) {
+            currentList.remove(drink)
+        } else {
+            currentList.add(drink)
+        }
+        _uiState.value = _uiState.value.copy(selectedDrinks = currentList)
     }
 }

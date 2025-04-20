@@ -3,8 +3,9 @@ package com.orderize.orderize.ui.drinks
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -18,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
-import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.theme.backgroundGreen
 
 @Composable
@@ -33,12 +33,14 @@ fun DrinkScreen(
         drink.first.contains(state.searchQuery, ignoreCase = true)
     }
 
+    val selectedDrinks = state.selectedDrinks
+
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(backgroundGreen)
     ) {
-        TopBar(navController = navController)
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -56,6 +58,7 @@ fun DrinkScreen(
                             .padding(top = 40.dp)
                     )
 
+
                     Row(
                         modifier = Modifier.padding(top = 50.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -68,48 +71,106 @@ fun DrinkScreen(
                                 .padding(top = 60.dp)
                         )
 
-                        Text(
-                            text = "Selecione uma bebida!",
-                            color = Color(0xFF3A3C16),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
+                        Column(
                             modifier = Modifier
                                 .offset(y = 25.dp)
-                                .padding(end = 70.dp),
-                            textAlign = TextAlign.Center
-                        )
+                                .padding(end = 70.dp)
+                                .heightIn(max = 150.dp)
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            if (selectedDrinks.isEmpty()) {
+                                Text(
+                                    text = "Selecione uma bebida!",
+                                    color = Color(0xFF3A3C16),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            } else {
+                                selectedDrinks.forEach { drinkName ->
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(vertical = 4.dp)
+                                            .border(1.dp, Color(0xFF3A3C16), RoundedCornerShape(8.dp))
+                                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = drinkName,
+                                            color = Color(0xFF3A3C16),
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 14.sp,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Remover bebida",
+                                            modifier = Modifier
+                                                .size(18.dp)
+                                                .clickable {
+                                                    viewModel.toggleDrinkSelection(drinkName)
+
+                                                },
+                                            tint = Color.Red
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
                     }
                 }
             }
 
             item {
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.baloon_02),
+                        painter = painterResource(R.drawable.baloon_03),
                         contentDescription = "Balão 02",
                         modifier = Modifier
-                            .size(350.dp)
-                            .padding(top = 30.dp)
+                            .size(400.dp)
+                            .padding(top = 5.dp, start = 60.dp)
                             .align(Alignment.TopEnd)
                     )
 
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(top = 100.dp, end = 30.dp)
-                            .width(300.dp),
+                            .padding(top = 40.dp, start = 20.dp, end = 20.dp)
+                            .width(290.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         SearchBar(
                             value = state.searchQuery,
                             onValueChange = viewModel::updateSearchQuery,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .size(55.dp)
                         )
+                        LazyColumn(
+                            modifier = Modifier
+                                .heightIn(max = 280.dp)
+                                .padding(end = 4.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp))
+                        {
+                            items(filteredItems.size) {
+                                index ->
+                                val drink = filteredItems[index]
+                                val isSelected = selectedDrinks.contains(drink.first)
+                                DrinkCard(
+                                    name = drink.first,
+                                    price = drink.second,
+                                    isSelected = isSelected,
+                                    onClick = {
+                                        viewModel.toggleDrinkSelection(drink.first)
 
-                        filteredItems.forEach { drink ->
-                            DrinkCard(name = drink.first, price = drink.second)
+                                    }
+                                )
+                            }
                         }
                     }
                 }
@@ -123,6 +184,7 @@ fun DrinkScreen(
                     Button(
                         onClick = { },
                         modifier = Modifier
+                            .padding(top = 10.dp)
                             .height(60.dp)
                             .width(250.dp),
                         shape = RoundedCornerShape(30),
@@ -171,12 +233,13 @@ fun SearchBar(value: String, onValueChange: (String) -> Unit, modifier: Modifier
 }
 
 @Composable
-fun DrinkCard(name: String, price: String) {
+fun DrinkCard(name: String, price: String, isSelected: Boolean, onClick: () -> Unit) {
+    val backgroundColor = if (isSelected) Color(0xFFFFFFFF) else Color(0xFF999999)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 4.dp)
-            .background(Color(0xFFEAE5DE), shape = RoundedCornerShape(12.dp))
+            .background(backgroundColor, shape = RoundedCornerShape(12.dp))
+            .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
