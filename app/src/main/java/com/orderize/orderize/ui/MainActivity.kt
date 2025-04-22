@@ -28,9 +28,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             OrderizeTheme {
                 val navController = rememberNavController()
-                //DrinkScreen(viewModel = DrinkViewModel(), navController = navController)
+                DrinkScreen(viewModel = DrinkViewModel(), navController = navController)
                 //HeatmapScreen(state = HeatmapScreenUiState(mockTables), navController = navController)
-                WriteOrderScreen(viewModel = writeOrderViewModel(), navController = navController)
+                //WriteOrderScreen(viewModel = writeOrderViewModel(), navController = navController)
                 //OrderizeNavigation()
             }
         }
