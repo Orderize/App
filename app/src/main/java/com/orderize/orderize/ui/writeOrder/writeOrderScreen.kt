@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,17 +25,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.orderize.orderize.R
+import com.orderize.orderize.repository.GeminiRepository
 import com.orderize.orderize.ui.common.component.TopBar
+import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.theme.backgroundGreen
 
 
 @Composable
 fun WriteOrderScreen(
+    geminiViewModel: GeminiViewModel,
     viewModel: writeOrderViewModel = writeOrderViewModel(),
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val textUiState = viewModel.uiState
+    val state by geminiViewModel.uiState.collectAsState()
+    var prompt by remember { mutableStateOf("") }
+
+    LaunchedEffect(prompt) {
+        geminiViewModel.transformText(prompt)
+    }
 
     Column(
         modifier = modifier
@@ -84,7 +94,10 @@ fun WriteOrderScreen(
 
                     TextField(
                         value = textUiState.text,
-                        onValueChange = { viewModel.onTextChange(it) },
+                        onValueChange = {
+                            prompt = it
+                            viewModel.onTextChange(it)
+                        },
                         textStyle = TextStyle(
                             fontSize = 20.sp,
                             color = Color.Black),
@@ -123,16 +136,32 @@ fun WriteOrderScreen(
                             .align(Alignment.TopEnd)
                     )
 
-                    Text(
-                        text = "Resultado:",
-                        color = Color(0xFFFFFFFF),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .offset(y = 70.dp)
-                            .padding(start = 80.dp)
+                    if (state.loading) CircularProgressIndicator(color = Color.Black)
 
-                    )
+                    when {
+                        state.response.isNotBlank() -> {
+                            Text(
+                                text = "Pedido formatado:",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                color = Color(0xFFFFFFFF),
+                                modifier = Modifier
+                                    .offset(y = 70.dp)
+                                    .padding(start = 80.dp)
+                                )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(text = state.response, color = Color.DarkGray)
+                        }
+
+                        state.error.isNotBlank() -> {
+                            Text(
+                                text = "Erro: ${state.error}",
+                                color = Color.Red,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
                 }
             }
 
@@ -167,6 +196,7 @@ fun WriteOrderScreen(
 private fun PreviewWriteOrderScreen() {
     val navController = rememberNavController()
     WriteOrderScreen(
+        geminiViewModel = GeminiViewModel(GeminiRepository()),
         viewModel = writeOrderViewModel(),
         navController = navController
     )
