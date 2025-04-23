@@ -15,6 +15,8 @@ import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
+import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
@@ -75,6 +77,12 @@ fun OrderizeNavigation() {
 
             composable<HistoryRoute> {
                 HistoryOrdersScreen(navController = navController, modifier = Modifier.padding(innerPadding), viewModel = HistoryViewModel())
+            }
+
+            composable<ForgotPasswordRoute> {
+                val viewModel: ForgotPasswordViewModel = koinViewModel()
+
+                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
             }
         }
     }
