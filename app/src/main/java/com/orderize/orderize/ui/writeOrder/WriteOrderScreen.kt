@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -160,13 +162,18 @@ fun WriteOrderScreen(
 
                     when {
                         geminiState.response.isNotBlank() -> {
-                            Text(
-                                text = geminiState.response,
-                                color = Color(0xFFFFFFFF),
+                            Box(
                                 modifier = Modifier
                                     .offset(y = 100.dp)
-                                    .padding(start = 85.dp)
-                            )
+                                    .padding(start = 85.dp, end = 16.dp)
+                                    .height(170.dp) // altura visível
+                                    .verticalScroll(rememberScrollState())
+                            ) {
+                                Text(
+                                    text = geminiState.response,
+                                    color = Color(0xFFFFFFFF),
+                                )
+                            }
                         }
 
                         geminiState.error.isNotBlank() -> {
