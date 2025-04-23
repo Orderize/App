@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,17 +25,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.orderize.orderize.R
+import com.orderize.orderize.repository.GeminiRepository
 import com.orderize.orderize.ui.common.component.TopBar
+import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.theme.backgroundGreen
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 
 
 @Composable
 fun WriteOrderScreen(
-    viewModel: writeOrderViewModel = writeOrderViewModel(),
+    geminiViewModel: GeminiViewModel,
+    viewModel: WriteOrderViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val textUiState = viewModel.uiState
+    val geminiState by geminiViewModel.uiState.collectAsState()
+
+    LaunchedEffect(textUiState.text) {
+        snapshotFlow { textUiState.text }
+            .debounce(3000)
+            .filter { it.isNotBlank() }
+            .collect { prompt ->
+                geminiViewModel.transformText(prompt)
+            }
+    }
 
     Column(
         modifier = modifier
@@ -84,7 +100,9 @@ fun WriteOrderScreen(
 
                     TextField(
                         value = textUiState.text,
-                        onValueChange = { viewModel.onTextChange(it) },
+                        onValueChange = {
+                            viewModel.onTextChange(it)
+                        },
                         textStyle = TextStyle(
                             fontSize = 20.sp,
                             color = Color.Black),
@@ -124,15 +142,45 @@ fun WriteOrderScreen(
                     )
 
                     Text(
-                        text = "Resultado:",
-                        color = Color(0xFFFFFFFF),
+                        text = "Pedido formatado:",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
+                        color = Color(0xFFFFFFFF),
                         modifier = Modifier
                             .offset(y = 70.dp)
-                            .padding(start = 80.dp)
-
+                            .padding(start = 85.dp)
                     )
+
+                    if (geminiState.loading) CircularProgressIndicator(
+                        color = Color.Black,
+                        modifier = Modifier
+                            .offset(y = 150.dp)
+                            .padding(start = 150.dp)
+                    )
+
+                    when {
+                        geminiState.response.isNotBlank() -> {
+                            Text(
+                                text = geminiState.response,
+                                color = Color(0xFFFFFFFF),
+                                modifier = Modifier
+                                    .offset(y = 100.dp)
+                                    .padding(start = 85.dp)
+                            )
+                        }
+
+                        geminiState.error.isNotBlank() -> {
+                            Text(
+                                text = "Sem formatação: ${textUiState.text}",
+                                color = Color.Red,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .offset(y = 80.dp)
+                                    .padding(start = 85.dp)
+                            )
+                        }
+                    }
+
                 }
             }
 
@@ -167,7 +215,8 @@ fun WriteOrderScreen(
 private fun PreviewWriteOrderScreen() {
     val navController = rememberNavController()
     WriteOrderScreen(
-        viewModel = writeOrderViewModel(),
+        geminiViewModel = GeminiViewModel(GeminiRepository()),
+        viewModel = WriteOrderViewModel(),
         navController = navController
     )
 }
