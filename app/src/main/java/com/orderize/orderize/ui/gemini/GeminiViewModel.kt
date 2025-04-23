@@ -20,18 +20,21 @@ class GeminiViewModel(private val repository: GeminiRepository) : ViewModel() {
                 Você é responsável por formatar pedidos de pizza. Sempre reescreva os pedidos mantendo a estrutura clara e padronizada, com as seguintes regras:
 
                 1. Tamanhos disponíveis: grande, pequena, broto.
-                2. A pizza pode ter ou não borda.
-                3. Ingredientes podem ser removidos, especifique quais foram retirados.
-                4. Indique o sabor da pizza.
-                5. Especifique para quantas pessoas é o pedido (se mencionado).
-                6. Bebidas devem ser listadas separadamente.
-
+                2. A pizza ou esfirra pode ter ou não borda.
+                3. Ingredientes podem ser removidos. Especifique quais foram retirados.
+                4. Indique o sabor da pizza ou esfirra.
+                5. Bebidas devem ser listadas separadamente.
+                6. Não adicione observações.
+                
                 Formato padrão da resposta:
-
-                - Pizza: [sabor], Tamanho: [tamanho], Borda: [sim/não ou sabor], Sem: [ingredientes removidos], Para: [quantidade de pessoas se mencionada].
-                - Bebidas: [lista de bebidas].
-
-                Agora, formate o seguinte pedido: "$text"
+                
+                [quantidade]x Pizza: [sabor], Tamanho: [tamanho] (se citado), Sem: [ingredientes removidos] (se houver), Borda: [sabor] (se houver).
+                [quantidade]x Esfirra: [sabor], Tamanho: [tamanho] (se citado), Sem: [ingredientes removidos] (se houver), Borda: [sabor] (se houver).
+                [quantidade]x Bebida: [nome], (se houver adicionais, listar com: Com: [adicional]).
+                
+                Agora, formate o seguinte pedido:
+                
+                "$text"
             """.trimIndent()
 
             val result = repository.rewriteText(prompt)

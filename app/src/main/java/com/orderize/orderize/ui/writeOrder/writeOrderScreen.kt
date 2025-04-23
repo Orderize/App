@@ -29,6 +29,8 @@ import com.orderize.orderize.repository.GeminiRepository
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.theme.backgroundGreen
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 
 
 @Composable
@@ -39,11 +41,15 @@ fun WriteOrderScreen(
     modifier: Modifier = Modifier
 ) {
     val textUiState = viewModel.uiState
-    val state by geminiViewModel.uiState.collectAsState()
-    var prompt by remember { mutableStateOf("") }
+    val geminiState by geminiViewModel.uiState.collectAsState()
 
-    LaunchedEffect(prompt) {
-        geminiViewModel.transformText(prompt)
+    LaunchedEffect(textUiState.text) {
+        snapshotFlow { textUiState.text }
+            .debounce(3000)
+            .filter { it.isNotBlank() }
+            .collect { prompt ->
+                geminiViewModel.transformText(prompt)
+            }
     }
 
     Column(
@@ -95,7 +101,6 @@ fun WriteOrderScreen(
                     TextField(
                         value = textUiState.text,
                         onValueChange = {
-                            prompt = it
                             viewModel.onTextChange(it)
                         },
                         textStyle = TextStyle(
@@ -136,28 +141,42 @@ fun WriteOrderScreen(
                             .align(Alignment.TopEnd)
                     )
 
-                    if (state.loading) CircularProgressIndicator(color = Color.Black)
+                    Text(
+                        text = "Pedido formatado:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color(0xFFFFFFFF),
+                        modifier = Modifier
+                            .offset(y = 70.dp)
+                            .padding(start = 85.dp)
+                    )
+
+                    if (geminiState.loading) CircularProgressIndicator(
+                        color = Color.Black,
+                        modifier = Modifier
+                            .offset(y = 150.dp)
+                            .padding(start = 150.dp)
+                    )
 
                     when {
-                        state.response.isNotBlank() -> {
+                        geminiState.response.isNotBlank() -> {
                             Text(
-                                text = "Pedido formatado:",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
+                                text = geminiState.response,
                                 color = Color(0xFFFFFFFF),
                                 modifier = Modifier
-                                    .offset(y = 70.dp)
-                                    .padding(start = 80.dp)
-                                )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = state.response, color = Color.DarkGray)
+                                    .offset(y = 100.dp)
+                                    .padding(start = 85.dp)
+                            )
                         }
 
-                        state.error.isNotBlank() -> {
+                        geminiState.error.isNotBlank() -> {
                             Text(
-                                text = "Erro: ${state.error}",
+                                text = "Sem formatação: ${textUiState.text}",
                                 color = Color.Red,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .offset(y = 80.dp)
+                                    .padding(start = 85.dp)
                             )
                         }
                     }

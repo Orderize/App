@@ -15,7 +15,7 @@ import org.json.JSONObject
 
 class GeminiRepository {
 
-    private val apiKey = /*BuildConfig.GEMINI_API_KEY ?:*/ "AIzaSyAhMY8PQcd6Wh8r6iViPZ8E7w5qUr-MULo"
+    private val apiKey = BuildConfig.GEMINI_API_KEY
     private val client: OkHttpClient = OkHttpClient()
 
     suspend fun rewriteText(prompt: String): Result<String> = withContext(Dispatchers.IO) {
