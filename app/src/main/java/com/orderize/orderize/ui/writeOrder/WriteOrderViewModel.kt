@@ -5,8 +5,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 
-class writeOrderViewModel : ViewModel() {
-    var uiState by mutableStateOf(writeOrderUiState())
+class WriteOrderViewModel : ViewModel() {
+    var uiState by mutableStateOf(WriteOrderUiState())
         private set
 
     fun onTextChange(newText: String) {

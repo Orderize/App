@@ -9,19 +9,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.orderize.orderize.repository.GeminiRepository
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
-import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
-import com.orderize.orderize.ui.history.History
-import com.orderize.orderize.ui.login.ForgotPasswordScreen
+import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
+import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
 import com.orderize.orderize.ui.orderdetails.OrderDetailsViewModel
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeScreen
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeViewModel
+import com.orderize.orderize.ui.writeOrder.WriteOrderScreen
+import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -59,6 +62,16 @@ fun OrderizeNavigation() {
                     navController = navController,
                     modifier = Modifier.padding(innerPadding),
                     showStatus = arguments.showStatus
+                )
+            }
+
+            composable<WriteOrderRoute> {
+                val geminiViewModel: GeminiViewModel = GeminiViewModel(GeminiRepository())
+                val viewModel: WriteOrderViewModel = koinViewModel()
+                WriteOrderScreen(
+                    geminiViewModel = geminiViewModel,
+                    viewModel = viewModel,
+                    navController = navController
                 )
             }
 
