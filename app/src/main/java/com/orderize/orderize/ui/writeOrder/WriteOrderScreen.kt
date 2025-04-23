@@ -166,7 +166,7 @@ fun WriteOrderScreen(
                                 modifier = Modifier
                                     .offset(y = 100.dp)
                                     .padding(start = 85.dp, end = 16.dp)
-                                    .height(170.dp) // altura visível
+                                    .height(170.dp)
                                     .verticalScroll(rememberScrollState())
                             ) {
                                 Text(
