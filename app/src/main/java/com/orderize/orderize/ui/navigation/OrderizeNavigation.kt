@@ -14,7 +14,6 @@ import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
-import com.orderize.orderize.ui.history.History
 import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
