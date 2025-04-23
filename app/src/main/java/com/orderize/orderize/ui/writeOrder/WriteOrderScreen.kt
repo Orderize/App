@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 fun WriteOrderScreen(
     geminiViewModel: GeminiViewModel,
-    viewModel: writeOrderViewModel = writeOrderViewModel(),
+    viewModel: WriteOrderViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -216,7 +216,7 @@ private fun PreviewWriteOrderScreen() {
     val navController = rememberNavController()
     WriteOrderScreen(
         geminiViewModel = GeminiViewModel(GeminiRepository()),
-        viewModel = writeOrderViewModel(),
+        viewModel = WriteOrderViewModel(),
         navController = navController
     )
 }

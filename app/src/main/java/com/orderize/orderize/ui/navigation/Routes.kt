@@ -12,6 +12,9 @@ object HomePizzaioloRoute
 object HistoryRoute
 
 @Serializable
+object WriteOrderRoute
+
+@Serializable
 data class OrderDetailsRoute(
     val itemId: Long,
     val showStatus: Boolean = true
