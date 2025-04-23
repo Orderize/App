@@ -1,5 +1,5 @@
 package com.orderize.orderize.ui.writeOrder
 
-data class writeOrderUiState(
+data class WriteOrderUiState(
     val text: String = ""
 )
