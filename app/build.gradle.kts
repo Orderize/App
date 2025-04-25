@@ -24,19 +24,28 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val orderizeBaseUrlTag = "ORDERIZE_BASE_URL"
+        val geminiApiKeyTag = "GEMINI_API_KEY"
         var orderizeBaseUrl = ""
+        var geminiApiKey = ""
         try {
             val props = Properties()
             props.load(FileInputStream(File("$rootDir/local.properties")))
             orderizeBaseUrl = props[orderizeBaseUrlTag].toString()
+            geminiApiKey = props.getProperty(geminiApiKeyTag, "")
         } catch (ignored: IOException) {
             orderizeBaseUrl = System.getenv(orderizeBaseUrlTag)
+            geminiApiKey = System.getenv(geminiApiKeyTag) ?: ""
         }
 
         if (orderizeBaseUrl.isBlank()) {
             throw GradleException("ORDERIZE_BASE_URL não encontrada")
         }
+        if (geminiApiKey.isBlank()) {
+            throw GradleException("GEMINI_API_KEY não encontrada")
+        }
+
         buildConfigField("String", orderizeBaseUrlTag, "\"$orderizeBaseUrl\"")
+        buildConfigField("String", geminiApiKeyTag, "\"$geminiApiKey\"")
     }
 
     buildTypes {
@@ -100,5 +109,15 @@ dependencies {
 //    implementation("io.insert-koin:koin-androidx-viewmodel:4.0.0")
 
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+
+    //Chucker
+    debugImplementation("com.github.chuckerteam.chucker:library:4.1.0")
 
 }

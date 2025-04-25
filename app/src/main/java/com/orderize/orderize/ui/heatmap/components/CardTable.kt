@@ -27,7 +27,7 @@ fun CardTable(table: Table, onCardClick: (Table) -> Unit = {}) {
             .height(91.dp)
             .border(
                 width = 1.dp,
-                color = Color.White,
+                color = Color.White
             )
             .then(
                 if (clickable) Modifier.clickable { onCardClick(table) } else Modifier
@@ -40,7 +40,9 @@ fun CardTable(table: Table, onCardClick: (Table) -> Unit = {}) {
             Text(text = "Mesa ${table.number}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = darkerMossGreen)
         }
     }
+
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -52,3 +54,4 @@ fun CardTablePreview(modifier: Modifier = Modifier) {
     )
     CardTable(table)
 }
+
