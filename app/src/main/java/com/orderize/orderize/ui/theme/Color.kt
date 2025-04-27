@@ -18,3 +18,6 @@ val strokeGray = Color(0xFFADACAC)
 val pendingRed = Color(0xFFD25742)
 val preparingYellow = Color(0xFFE0C21A)
 val textGray = Color(0xFFB2B3A4)
+
+val fundo = Color(0xFFF3EFE9)
+val verdeClaro = Color(0xFFCFD2BF)

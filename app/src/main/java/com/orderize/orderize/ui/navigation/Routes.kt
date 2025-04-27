@@ -15,3 +15,6 @@ object HistoryRoute
 data class OrderDetailsRoute(
     val itemId: Long
 )
+
+@Serializable
+object OrderCreateRoute

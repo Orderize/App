@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,8 @@ import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.history.History
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
+import com.orderize.orderize.ui.order.OrderScreen
+import com.orderize.orderize.ui.order.OrderViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
 import com.orderize.orderize.ui.orderdetails.OrderDetailsViewModel
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeScreen
@@ -61,6 +64,11 @@ fun OrderizeNavigation() {
 
             composable<HistoryRoute> {
                 History(navController = navController, modifier = Modifier.padding(innerPadding))
+            }
+
+            composable<OrderCreateRoute>{
+                val viewModel: OrderViewModel = koinViewModel()
+                OrderScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding), navController = navController)
             }
         }
     }
