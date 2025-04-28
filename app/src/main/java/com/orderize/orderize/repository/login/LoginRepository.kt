@@ -1,5 +1,6 @@
 package com.orderize.orderize.repository.login
 
+import android.util.Log
 import com.orderize.orderize.model.NetResource
 import com.orderize.orderize.model.User
 import com.orderize.orderize.repository.AppDataStore
@@ -28,7 +29,7 @@ class LoginRepository(
         )
 
         if (tokenResponse !is NetResource.Success) {
-            throw Exception("Login inváido, email ou senha incorretos!")
+            return NetResource.Fail("Login inváido, email ou senha incorretos!")
         }
 
         val userResponse = service.getUserByEmail(

@@ -36,17 +36,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.orderize.orderize.ui.drinks.DrinkViewModel
+import com.orderize.orderize.ui.gemini.GeminiViewModel
+import com.orderize.orderize.ui.order.OrderScreen
+import com.orderize.orderize.ui.order.OrderViewModel
 import com.orderize.orderize.ui.theme.backgroundGreen
 import com.orderize.orderize.ui.theme.mossGreen
 import com.orderize.orderize.ui.theme.orderizeGray
+import com.orderize.orderize.ui.writeOrder.WriteOrderScreen
+import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
 
 @Composable
 fun CardItem(
     titulo: String,
     cardAberto: Boolean,
     onCardAbertoChange: (Boolean) -> Unit,
-//    conteudo: @Composable () -> Unit,
-    modifier: Modifier = Modifier
+    onAddClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     Card(
@@ -66,9 +75,7 @@ fun CardItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(),
-//                    .padding(5.dp)
-//                    .border(, Color.White)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = titulo,
@@ -85,13 +92,7 @@ fun CardItem(
                     modifier = Modifier
                         .width(50.dp)
                         .height(50.dp),
-                    onClick = {
-                        if (titulo == "Pizzas") {
-//                        TODO: adicionar chamada para o modal de pizza
-                        } else if (titulo == "Bebidas") {
-//                        TODO: adicionar chamada para o modal de drink
-                        }
-                    }
+                    onClick = onAddClick
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -151,16 +152,4 @@ fun CardItem(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CardItemAbertoPreview() {
-    var cardAberto by remember { mutableStateOf(true) }
-
-    CardItem(
-        titulo = "Título do Card",
-        cardAberto = cardAberto,
-        onCardAbertoChange = { cardAberto = it }
-    )
 }

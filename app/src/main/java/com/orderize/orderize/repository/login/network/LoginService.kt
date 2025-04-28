@@ -1,5 +1,6 @@
 package com.orderize.orderize.repository.login.network
 
+import android.util.Log
 import com.orderize.orderize.model.NetResource
 import com.orderize.orderize.repository.login.network.dto.LoginRequestDto
 import com.orderize.orderize.repository.login.network.dto.UserResponseDto
@@ -30,9 +31,11 @@ class LoginService(
                 if (response.errorBody() != null) {
                     message += response.errorBody()
                 }
+                Log.i("LoginService", message)
                 NetResource.Fail(message)
             }
         } catch (exception: Exception) {
+            Log.i("LoginService", exception.message!!)
             NetResource.Fail(exception.message ?: exception.toString())
         }
     }
