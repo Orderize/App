@@ -43,7 +43,12 @@ class ProfileViewModel(
 
     private fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.logout()
+            val logout = repository.logout()
+            if (logout) {
+                _uiState.update { currentState ->
+                    currentState.copy(userDisconnected = true)
+                }
+            }
         }
     }
 }

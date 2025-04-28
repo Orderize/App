@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,27 +31,41 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.orderize.orderize.R
+import com.orderize.orderize.ui.navigation.HomePizzaioloRoute
+import com.orderize.orderize.ui.navigation.LoginRoute
 import com.orderize.orderize.ui.theme.backgroundGreen
 import com.orderize.orderize.ui.theme.darkerMossGreen
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val state by viewModel.uiState.collectAsState()
     ProfileScreen(
         state = state,
-        modifier = modifier
+        modifier = modifier,
+        navController = navController
     )
 }
 
 @Composable
 fun ProfileScreen(
     state: ProfileScreenUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
+
+    LaunchedEffect(state.userDisconnected) {
+        navController.navigate(LoginRoute) {
+            popUpTo(LoginRoute) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -268,10 +283,10 @@ fun ProfileScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ProfileScreenPreview() {
-    ProfileScreen(
-        state = ProfileScreenUiState()
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun ProfileScreenPreview() {
+//    ProfileScreen(
+//        state = ProfileScreenUiState()
+//    )
+//}

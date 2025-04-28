@@ -94,7 +94,8 @@ fun OrderizeNavigation() {
                 val viewModel: ProfileViewModel = koinViewModel()
                 ProfileScreen(
                     viewModel = viewModel,
-                    modifier = modifier
+                    modifier = modifier,
+                    navController = navController
                 )
             }
 

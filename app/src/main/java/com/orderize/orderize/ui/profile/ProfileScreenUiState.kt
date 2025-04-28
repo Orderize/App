@@ -8,5 +8,6 @@ data class ProfileScreenUiState(
     val averageTimeValue: Int = 0,
     val averageTimeText: String = "",
     val companyName: String = "",
-    val logout: () -> Unit = {}
+    val logout: () -> Unit = {},
+    val userDisconnected: Boolean = false
 )
