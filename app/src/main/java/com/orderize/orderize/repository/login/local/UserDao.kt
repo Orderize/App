@@ -20,7 +20,7 @@ interface UserDao {
     suspend fun getUserByApiToken(token: String): User?
 
     @Query("DELETE FROM User WHERE apiToken = :token")
-    suspend fun deleteUserByApiToke(token: Long): Int?
+    suspend fun deleteUserByApiToken(token: String): Int?
 
     @Delete
     suspend fun deleteUser(user: UserEntity): Int?

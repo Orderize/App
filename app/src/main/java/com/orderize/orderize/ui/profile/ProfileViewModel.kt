@@ -17,6 +17,11 @@ class ProfileViewModel(
     val uiState get() = _uiState.asStateFlow()
 
     init {
+        _uiState.update { currentState ->
+            currentState.copy(
+                logout = { logout() }
+            )
+        }
         getUserData()
     }
 
@@ -33,6 +38,12 @@ class ProfileViewModel(
                     )
                 }
             }
+        }
+    }
+
+    private fun logout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.logout()
         }
     }
 }

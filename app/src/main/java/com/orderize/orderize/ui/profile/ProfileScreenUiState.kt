@@ -7,5 +7,6 @@ data class ProfileScreenUiState(
     val qttCookedPizzas: Int = 0,
     val averageTimeValue: Int = 0,
     val averageTimeText: String = "",
-    val companyName: String = ""
+    val companyName: String = "",
+    val logout: () -> Unit = {}
 )
