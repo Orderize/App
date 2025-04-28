@@ -22,3 +22,6 @@ data class OrderDetailsRoute(
     val itemId: Long,
     val showStatus: Boolean = true
 )
+
+@Serializable
+object OrderCreateRoute
