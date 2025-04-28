@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
 import com.orderize.orderize.ui.navigation.HistoryRoute
 import com.orderize.orderize.ui.navigation.HomePizzaioloRoute
+import com.orderize.orderize.ui.navigation.PizzaioloProfileRoute
 import com.orderize.orderize.ui.theme.orderizeGray
 
 @Composable
@@ -26,7 +27,11 @@ fun BottomNavBar(
     modifier: Modifier = Modifier
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val screensWithBottomNavPizzaiolo = listOf(HomePizzaioloRoute::class.qualifiedName!!, HistoryRoute::class.qualifiedName!!)
+    val screensWithBottomNavPizzaiolo = listOf(
+        HomePizzaioloRoute::class.qualifiedName!!,
+        HistoryRoute::class.qualifiedName!!,
+        PizzaioloProfileRoute::class.qualifiedName!!
+    )
     val screensWithBottomNavAttendant = emptyList<String>()
 
 
@@ -93,7 +98,7 @@ fun BottomNavBar(
                         } else {
                             Icon(
                                 painterResource(R.drawable.ic_history_red),
-                                contentDescription = "Ícone de Histórico não selecionado",
+                                contentDescription = "Ícone de Histórico selecionado",
                                 tint = Color.Unspecified,
                                 modifier = Modifier
                                     .size(34.dp)
@@ -110,16 +115,40 @@ fun BottomNavBar(
                     }
                 )
                 NavigationBarItem(
-                    selected = false,
-                    onClick = {},
-                    icon = { Icon(
-                        painterResource(R.drawable.ic_profile_default),
-                        contentDescription = "Ícone de Perfil não selecionado",
-                        tint = Color.Unspecified,
-                        modifier = Modifier
-                            .size(34.dp)
-                    ) },
-                    label = { Text("Perfil", color = Color.Black) }
+                    selected = currentRoute?.startsWith(PizzaioloProfileRoute::class.qualifiedName!!) ?: false,
+                    onClick = {
+                        val isRoute = currentRoute?.startsWith(PizzaioloProfileRoute::class.qualifiedName!!) ?: false
+                        if (!isRoute)
+                            navController.navigate(PizzaioloProfileRoute)
+                    },
+                    icon = {
+                        val isRoute = currentRoute?.startsWith(PizzaioloProfileRoute::class.qualifiedName!!) ?: false
+                        if (!isRoute) {
+                            Icon(
+                                painterResource(R.drawable.ic_profile_default),
+                                contentDescription = "Ícone de Perfil não selecionado",
+                                tint = Color.Unspecified,
+                                modifier = Modifier
+                                    .size(34.dp)
+                            )
+                        } else {
+                            Icon(
+                                painterResource(R.drawable.ic_profile_red),
+                                contentDescription = "Ícone de Perfil selecionado",
+                                tint = Color.Unspecified,
+                                modifier = Modifier
+                                    .size(34.dp)
+                            )
+                        }
+                           },
+                    label = {
+                        val isRoute = currentRoute?.startsWith(PizzaioloProfileRoute::class.qualifiedName!!) ?: false
+                        if (!isRoute) {
+                            Text("Perfil", color = Color.Black)
+                        } else {
+                            Text("Perfil", color = Color.Red)
+                        }
+                    }
                 )
 
             }

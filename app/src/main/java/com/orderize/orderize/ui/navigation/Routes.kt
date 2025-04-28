@@ -25,3 +25,6 @@ data class OrderDetailsRoute(
 
 @Serializable
 object OrderCreateRoute
+
+@Serializable
+object PizzaioloProfileRoute
