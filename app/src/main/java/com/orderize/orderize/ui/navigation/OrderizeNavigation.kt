@@ -27,6 +27,8 @@ import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
 import com.orderize.orderize.ui.orderdetails.OrderDetailsViewModel
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeScreen
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeViewModel
+import com.orderize.orderize.ui.profile.ProfileScreen
+import com.orderize.orderize.ui.profile.ProfileViewModel
 import com.orderize.orderize.ui.writeOrder.WriteOrderScreen
 import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -86,7 +88,15 @@ fun OrderizeNavigation() {
             composable<ForgotPasswordRoute> {
                 val viewModel: ForgotPasswordViewModel = koinViewModel()
 
-                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
+                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = modifier)
+            }
+
+            composable<PizzaioloProfileRoute> {
+                val viewModel: ProfileViewModel = koinViewModel()
+                ProfileScreen(
+                    viewModel = viewModel,
+                    modifier = modifier
+                )
             }
 
             composable<OrderCreateRoute>{

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.orderize.orderize.ui.navigation.OrderDetailsRoute
+import com.orderize.orderize.ui.navigation.PizzaioloProfileRoute
 import com.orderize.orderize.ui.theme.mossGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +31,7 @@ fun TopBar(
 
     val screensWithTopAppBar = mapOf(
         OrderDetailsRoute::class.qualifiedName!! to "Detalhes",
+        PizzaioloProfileRoute::class.qualifiedName!! to "Perfil"
     )
 
     val title = screensWithTopAppBar.keys.find { currentRoute?.startsWith(it) == true }
