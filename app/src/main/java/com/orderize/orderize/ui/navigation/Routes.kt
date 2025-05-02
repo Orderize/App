@@ -28,3 +28,6 @@ object OrderCreateRoute
 
 @Serializable
 object PizzaioloProfileRoute
+
+@Serializable
+object DrinkRoute

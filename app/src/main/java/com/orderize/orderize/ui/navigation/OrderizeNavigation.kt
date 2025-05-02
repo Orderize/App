@@ -12,6 +12,8 @@ import androidx.navigation.toRoute
 import com.orderize.orderize.repository.GeminiRepository
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
+import com.orderize.orderize.ui.drinks.DrinkScreen
+import com.orderize.orderize.ui.drinks.DrinkViewModel
 import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
 import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.gemini.GeminiViewModel
@@ -94,13 +96,30 @@ fun OrderizeNavigation() {
                 val viewModel: ProfileViewModel = koinViewModel()
                 ProfileScreen(
                     viewModel = viewModel,
-                    modifier = modifier
+                    modifier = modifier,
+                    navController = navController
                 )
             }
 
-            composable<OrderCreateRoute>{
-                val viewModel: OrderViewModel = koinViewModel()
-                OrderScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding), navController = navController)
+            composable<OrderCreateRoute> {
+                val orderViewModel: OrderViewModel = koinViewModel()
+                val drinkViewModel: DrinkViewModel = koinViewModel()
+                val geminiViewModel: GeminiViewModel = koinViewModel()
+                val writeOrderViewModel: WriteOrderViewModel = koinViewModel()
+
+                OrderScreen(
+                    orderViewModel = orderViewModel,
+                    drinkViewModel = drinkViewModel,
+                    geminiViewModel = geminiViewModel,
+                    writeOrderViewModel = writeOrderViewModel,
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+
+            composable<DrinkRoute>{
+                val viewModel: DrinkViewModel = koinViewModel()
+                DrinkScreen(navController = navController,viewModel = viewModel, modifier = modifier)
             }
         }
     }

@@ -15,38 +15,57 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.orderize.orderize.R
+import com.orderize.orderize.ui.navigation.HomePizzaioloRoute
+import com.orderize.orderize.ui.navigation.LoginRoute
 import com.orderize.orderize.ui.theme.backgroundGreen
+import com.orderize.orderize.ui.theme.darkerMossGreen
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val state by viewModel.uiState.collectAsState()
     ProfileScreen(
         state = state,
-        modifier = modifier
+        modifier = modifier,
+        navController = navController
     )
 }
 
 @Composable
 fun ProfileScreen(
     state: ProfileScreenUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
+
+    LaunchedEffect(state.userDisconnected) {
+        navController.navigate(LoginRoute) {
+            popUpTo(LoginRoute) { inclusive = false }
+            launchSingleTop = true
+        }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -241,13 +260,33 @@ fun ProfileScreen(
             }
         }
 
+        Spacer(Modifier.size(16.dp))
+
+        Button(
+            onClick = state.logout,
+            colors = ButtonDefaults.buttonColors(
+                darkerMossGreen
+            ),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .height(46.dp)
+                .width(128.dp)
+
+        ) {
+            Text(
+                text = "Sair",
+                color = Color.White,
+                fontSize = 22.sp
+            )
+        }
+
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun ProfileScreenPreview() {
-    ProfileScreen(
-        state = ProfileScreenUiState()
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun ProfileScreenPreview() {
+//    ProfileScreen(
+//        state = ProfileScreenUiState()
+//    )
+//}

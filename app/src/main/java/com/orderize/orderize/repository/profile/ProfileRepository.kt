@@ -25,4 +25,20 @@ class ProfileRepository(
             return null
         }
     }
+
+    suspend fun logout(): Boolean {
+        try {
+            val token = dataStore.getToken()
+            if (token != null) {
+                userDao.deleteUserByApiToken(token)
+                dataStore.removeToken()
+                return true
+            }
+            return false
+        } catch (e: Exception) {
+            return false
+        // TODO: Tratar aqui melhorar função e talz, sem tempo por causa da apresentação
+            Log.i("ProfileRepository", "Erro em logout ${e.message}")
+        }
+    }
 }

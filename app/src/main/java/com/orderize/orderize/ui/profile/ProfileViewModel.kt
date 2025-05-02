@@ -17,6 +17,11 @@ class ProfileViewModel(
     val uiState get() = _uiState.asStateFlow()
 
     init {
+        _uiState.update { currentState ->
+            currentState.copy(
+                logout = { logout() }
+            )
+        }
         getUserData()
     }
 
@@ -31,6 +36,17 @@ class ProfileViewModel(
                         role = if (userData.role != "SALOON") "Pizzaiolo" else "Atendente",
                         companyName = "Testingzzaria"
                     )
+                }
+            }
+        }
+    }
+
+    private fun logout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val logout = repository.logout()
+            if (logout) {
+                _uiState.update { currentState ->
+                    currentState.copy(userDisconnected = true)
                 }
             }
         }
