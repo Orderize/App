@@ -35,7 +35,7 @@ class LoginService(
                 NetResource.Fail(message)
             }
         } catch (exception: Exception) {
-            Log.i("LoginService", exception.message!!)
+            Log.i("LoginService", "${exception.message}")
             NetResource.Fail(exception.message ?: exception.toString())
         }
     }

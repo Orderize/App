@@ -60,9 +60,11 @@ fun ProfileScreen(
 ) {
 
     LaunchedEffect(state.userDisconnected) {
-        navController.navigate(LoginRoute) {
-            popUpTo(LoginRoute) { inclusive = false }
-            launchSingleTop = true
+        if (state.userDisconnected) {
+            navController.navigate(LoginRoute) {
+                popUpTo(LoginRoute) { inclusive = false }
+                launchSingleTop = true
+            }
         }
     }
 
