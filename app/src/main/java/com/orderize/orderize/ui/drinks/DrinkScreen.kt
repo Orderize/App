@@ -16,25 +16,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
+import com.orderize.orderize.repository.AppDataStore
+import com.orderize.orderize.repository.drink.DrinkRepository
+import com.orderize.orderize.repository.drink.network.DrinkService
+import com.orderize.orderize.repository.drink.network.IDrinkService
 import com.orderize.orderize.ui.theme.backgroundGreen
 
 @Composable
 fun DrinkScreen(
-    viewModel: DrinkViewModel = DrinkViewModel(),
     navController: NavController,
+    viewModel: DrinkViewModel,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
-
     val filteredItems = state.items.filter { drink ->
         drink.first.contains(state.searchQuery, ignoreCase = true)
     }
 
     val selectedDrinks = state.selectedDrinks
-
 
     Column(
         modifier = modifier
@@ -57,7 +60,6 @@ fun DrinkScreen(
                             .size(350.dp)
                             .padding(top = 40.dp)
                     )
-
 
                     Row(
                         modifier = Modifier.padding(top = 50.dp),
@@ -91,7 +93,11 @@ fun DrinkScreen(
                                     Row(
                                         modifier = Modifier
                                             .padding(vertical = 4.dp)
-                                            .border(1.dp, Color(0xFF3A3C16), RoundedCornerShape(8.dp))
+                                            .border(
+                                                1.dp,
+                                                Color(0xFF3A3C16),
+                                                RoundedCornerShape(8.dp)
+                                            )
                                             .padding(horizontal = 12.dp, vertical = 8.dp),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
@@ -157,6 +163,7 @@ fun DrinkScreen(
                                 .padding(end = 4.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp))
                         {
+
                             items(filteredItems.size) {
                                 index ->
                                 val drink = filteredItems[index]
@@ -259,12 +266,13 @@ fun DrinkCard(name: String, price: String, isSelected: Boolean, onClick: () -> U
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun PreviewDrinkScreen() {
-    val navController = rememberNavController()
-    DrinkScreen(
-        viewModel = DrinkViewModel(),
-        navController = navController
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun PreviewDrinkScreen() {
+//    val navController = rememberNavController()
+//    DrinkScreen(
+//        viewModel = DrinkViewModel(),
+//        navController = navController
+//    )
+//}
+
