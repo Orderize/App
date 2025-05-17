@@ -29,4 +29,10 @@ class AppDataStore(
         return dataStore.data.first()[API_TOKEN_KEY]
     }
 
+    suspend fun removeToken() {
+        dataStore.edit { preferences ->
+            preferences[API_TOKEN_KEY] = ""
+        }
+    }
+
 }

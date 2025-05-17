@@ -15,17 +15,21 @@ import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.drinks.DrinkScreen
 import com.orderize.orderize.ui.drinks.DrinkViewModel
+import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
-import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
-import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
+import com.orderize.orderize.ui.order.OrderScreen
+import com.orderize.orderize.ui.order.OrderViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsScreen
 import com.orderize.orderize.ui.orderdetails.OrderDetailsViewModel
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeScreen
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeViewModel
+import com.orderize.orderize.ui.profile.ProfileScreen
+import com.orderize.orderize.ui.profile.ProfileViewModel
 import com.orderize.orderize.ui.writeOrder.WriteOrderScreen
 import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -45,15 +49,16 @@ fun OrderizeNavigation() {
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
         NavHost (navController = navController, startDestination = LoginRoute) {
             composable<LoginRoute> {
                 val viewModel: LoginViewModel = koinViewModel()
-                LoginScreen(viewModel = viewModel, modifier = Modifier.padding(innerPadding), navController = navController)
+                LoginScreen(viewModel = viewModel, modifier = modifier, navController = navController)
             }
 
             composable<HomePizzaioloRoute> {
                 val viewModel: PizzaioloHomeViewModel = koinViewModel()
-                PizzaioloHomeScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
+                PizzaioloHomeScreen(viewModel = viewModel, navController = navController, modifier = modifier)
             }
 
             composable<OrderDetailsRoute> { navBackStackEntry ->
@@ -63,7 +68,7 @@ fun OrderizeNavigation() {
                     viewModel = viewModel,
                     itemId = arguments.itemId,
                     navController = navController,
-                    modifier = Modifier.padding(innerPadding),
+                    modifier = modifier,
                     showStatus = arguments.showStatus
                 )
             }
@@ -79,16 +84,50 @@ fun OrderizeNavigation() {
             }
 
             composable<HistoryRoute> {
+
                 HistoryOrdersScreen(
                     navController = navController,
                     modifier = Modifier.padding(innerPadding),
                     viewModel = HistoryViewModel())
+
+                HistoryOrdersScreen(navController = navController, modifier = modifier, viewModel = HistoryViewModel())
+
             }
 
             composable<ForgotPasswordRoute> {
                 val viewModel: ForgotPasswordViewModel = koinViewModel()
 
-                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding))
+                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = modifier)
+            }
+
+            composable<PizzaioloProfileRoute> {
+                val viewModel: ProfileViewModel = koinViewModel()
+                ProfileScreen(
+                    viewModel = viewModel,
+                    modifier = modifier,
+                    navController = navController
+                )
+            }
+
+            composable<OrderCreateRoute> {
+                val orderViewModel: OrderViewModel = koinViewModel()
+                val drinkViewModel: DrinkViewModel = koinViewModel()
+                val geminiViewModel: GeminiViewModel = koinViewModel()
+                val writeOrderViewModel: WriteOrderViewModel = koinViewModel()
+
+                OrderScreen(
+                    orderViewModel = orderViewModel,
+                    drinkViewModel = drinkViewModel,
+                    geminiViewModel = geminiViewModel,
+                    writeOrderViewModel = writeOrderViewModel,
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+
+            composable<DrinkRoute>{
+                val viewModel: DrinkViewModel = koinViewModel()
+                DrinkScreen(navController = navController,viewModel = viewModel, modifier = modifier)
             }
 
             composable<DrinksRoute>{

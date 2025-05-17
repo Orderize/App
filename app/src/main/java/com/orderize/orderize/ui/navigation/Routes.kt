@@ -25,3 +25,10 @@ data class OrderDetailsRoute(
 
 @Serializable
 object DrinksRoute
+object OrderCreateRoute
+
+@Serializable
+object PizzaioloProfileRoute
+
+@Serializable
+object DrinkRoute
