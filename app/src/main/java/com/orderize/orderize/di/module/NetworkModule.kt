@@ -18,7 +18,7 @@ val networkModule = module {
         Interceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder()
-                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoIiwic3ViIjoia290bGluQGdtYWlsLmNvbSIsInVzZXJJZCI6MSwibmFtZSI6IktvdGxpbmF0b3Igb2YgbWV0YWwiLCJleHAiOjE3NDc2MjM4NjZ9.3no0fsZD7qwfTfpreliH0Z7WjYbwmz8MnuMIxhKrSrY")
+                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoIiwic3ViIjoia290bGluQGdtYWlsLmNvbSIsInVzZXJJZCI6MSwibmFtZSI6IktvdGxpbmF0b3Igb2YgbWV0YWwiLCJleHAiOjE3NDgwNTc5ODZ9.OcXPi5fVULUdKll6SH8ZkArbUGY3RcCVnA3EjC3WDt0")
             val request = requestBuilder.build()
             chain.proceed(request)
         }
