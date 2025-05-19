@@ -73,7 +73,7 @@ fun OrderizeNavigation() {
             }
 
             composable<WriteOrderRoute> {
-                val geminiViewModel: GeminiViewModel = GeminiViewModel(GeminiRepository())
+                val geminiViewModel: GeminiViewModel = koinViewModel()
                 val viewModel: WriteOrderViewModel = koinViewModel()
                 WriteOrderScreen(
                     geminiViewModel = geminiViewModel,
