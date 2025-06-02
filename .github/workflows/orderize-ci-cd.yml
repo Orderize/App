@@ -27,7 +27,7 @@ jobs:
         run: |
           if [[ "${GITHUB_REF##*/}" == "main" ]]; then
             ./gradlew assembleRelease
-          elif [[ "${GITHUB_REF##*/}" == "development" ]]; then
+          else
             ./gradlew assembleDebug
           fi
 
