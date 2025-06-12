@@ -9,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.orderize.orderize.repository.GeminiRepository
+import com.orderize.orderize.repository.drink.network.DrinkService
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.drinks.DrinkScreen
@@ -82,7 +84,14 @@ fun OrderizeNavigation() {
             }
 
             composable<HistoryRoute> {
+
+                HistoryOrdersScreen(
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding),
+                    viewModel = HistoryViewModel())
+
                 HistoryOrdersScreen(navController = navController, modifier = modifier, viewModel = HistoryViewModel())
+
             }
 
             composable<ForgotPasswordRoute> {
@@ -119,6 +128,13 @@ fun OrderizeNavigation() {
             composable<DrinkRoute>{
                 val viewModel: DrinkViewModel = koinViewModel()
                 DrinkScreen(navController = navController,viewModel = viewModel, modifier = modifier)
+            }
+
+            composable<DrinksRoute>{
+                val viewModel: DrinkViewModel = koinViewModel()
+                DrinkScreen(
+                    viewModel = viewModel, navController = navController, modifier = Modifier.padding(innerPadding)
+                )
             }
         }
     }

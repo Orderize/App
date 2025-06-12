@@ -7,6 +7,7 @@ import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.order.OrderViewModel
 import com.orderize.orderize.ui.orderdetails.OrderDetailsViewModel
 import com.orderize.orderize.ui.pizzaiolo_home.PizzaioloHomeViewModel
+import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
 import com.orderize.orderize.ui.profile.ProfileViewModel
 import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
 import org.koin.core.module.dsl.viewModel
@@ -16,6 +17,10 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { PizzaioloHomeViewModel() }
     viewModel { OrderDetailsViewModel() }
+    viewModel { DrinkViewModel(get()) }
+    viewModel { GeminiViewModel(get()) }
+    viewModel { WriteOrderViewModel() }
+    viewModel { ForgotPasswordViewModel() }
     viewModel { ProfileViewModel(get()) }
     viewModel { OrderViewModel() }
     viewModel { DrinkViewModel() }

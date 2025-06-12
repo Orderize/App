@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.first
 class AppDataStore(
     private val context: Context
 ) {
-
     companion object {
         private val API_TOKEN_KEY = stringPreferencesKey("apiToken")
     }

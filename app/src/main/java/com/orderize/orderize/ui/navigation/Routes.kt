@@ -24,6 +24,7 @@ data class OrderDetailsRoute(
 )
 
 @Serializable
+object DrinksRoute
 object OrderCreateRoute
 
 @Serializable
