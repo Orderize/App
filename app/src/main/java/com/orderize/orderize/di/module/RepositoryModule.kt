@@ -14,4 +14,5 @@ val repositoryModule = module {
     single { GeminiRepository() }
     single { DrinkRepository(get(), get())}
     single { ProfileRepository(get(), get()) }
+    single { GeminiRepository() }
 }

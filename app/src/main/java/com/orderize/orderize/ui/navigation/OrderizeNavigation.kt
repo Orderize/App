@@ -16,10 +16,10 @@ import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.drinks.DrinkScreen
 import com.orderize.orderize.ui.drinks.DrinkViewModel
 import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
-import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
+import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.order.OrderScreen
@@ -74,7 +74,7 @@ fun OrderizeNavigation() {
             }
 
             composable<WriteOrderRoute> {
-                val geminiViewModel: GeminiViewModel = GeminiViewModel(GeminiRepository())
+                val geminiViewModel: GeminiViewModel = koinViewModel()
                 val viewModel: WriteOrderViewModel = koinViewModel()
                 WriteOrderScreen(
                     geminiViewModel = geminiViewModel,
