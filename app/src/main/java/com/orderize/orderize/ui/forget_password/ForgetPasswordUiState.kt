@@ -1,11 +1,13 @@
-package com.orderize.orderize.ui.forgotpassword
+package com.orderize.orderize.ui.forget_password
 
 data class ForgotPasswordUiState(
     val email: String = "",
     val onEmailChange: (String) -> Unit = {},
     val alertPhrase: String = "",
     val onResetPasswordButtonClicked: (String) -> Unit = { email: String -> },
-    val loading: Boolean = false
+    val isLoading: Boolean = false,
+    val isPasswordResetSucessfull: Boolean? = null
+
 ) {
     // Função para verificar se o email inserido é válido
     fun isEmailValid() = email.isNotBlank() && email.contains("@")
