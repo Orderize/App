@@ -64,6 +64,9 @@ fun ProfileScreen(
             }
         }
     }
+    LaunchedEffect(Unit) {
+        state.getOrdersData()
+    }
 
     Column(
         modifier = modifier
@@ -72,95 +75,39 @@ fun ProfileScreen(
             .padding(8.dp)
     ) {
 
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .padding(horizontal = 8.dp, vertical = 14.dp)
+                .height(54.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .padding(8.dp)
-                    .weight(2f)
-                    .height(54.dp)
-            ) {
-                Text(
-                    text = "Qtd pizzas feitas no dia:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                )
 
-                Row(
+            Row {
+                Column(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_pizza),
-                        contentDescription = "Ícone de pizza",
-                        modifier = Modifier
-                            .size(32.dp)
-                            .align(Alignment.CenterVertically)
+                    Text(
+                        text = "Qtd Pedidos concluídos hoje",
+                        color = Color.Black,
+                        fontSize = 14.sp
                     )
-
-                    Spacer(Modifier.size(8.dp))
 
                     Text(
-                        text = state.qttCookedPizzas.toString(),
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
-                        color = Color.Black
+                        text = state.finishedOrders.toString(),
+                        color = Color.Black,
+                        fontSize = 18.sp
                     )
                 }
             }
 
-            Spacer(Modifier.width(16.dp))
-
-            Column(
-                modifier = Modifier
-                    .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .padding(8.dp)
-                    .weight(1f)
-                    .height(54.dp)
-            ) {
-                Text(
-                    text = "Tempo médio:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                )
-
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_clock),
-                        contentDescription = "Ícone de relófio",
-                        modifier = Modifier
-                            .size(32.dp)
-                            .align(Alignment.CenterVertically)
-                    )
-
-                    Spacer(Modifier.size(8.dp))
-
-                    Text(
-                        text = "0 Min",
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
-                        color = Color.Black
-                    )
-                }
-            }
         }
 
         Spacer(Modifier.height(16.dp))
@@ -173,24 +120,62 @@ fun ProfileScreen(
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(horizontal = 8.dp, vertical = 14.dp)
-                .height(54.dp)
+                .height(54.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Row {
                 Column(
                     modifier = Modifier
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Pizza mais produzida",
+                        text = "Qtd Pedidos pendentes de hoje",
                         color = Color.Black,
                         fontSize = 14.sp
                     )
 
                     Text(
-                        text = if (state.qttCookedPizzas <= 0) "Ainda não produziu pizzas"
-                        else state.mostCookedPizza,
+                        text = state.pendingOrders.toString(),
+                        color = Color.Black,
+                        fontSize = 18.sp
+                    )
+                }
+            }
+
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .padding(horizontal = 8.dp, vertical = 14.dp)
+                .height(54.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Row {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Qtd Pedidos em preparação de hoje",
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+
+                    Text(
+                        text = state.preparingOrders.toString(),
                         color = Color.Black,
                         fontSize = 18.sp
                     )

@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -30,15 +29,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.orderize.orderize.R
 import com.orderize.orderize.model.MockPizza
+import com.orderize.orderize.model.Pizza
 import com.orderize.orderize.ui.theme.strokeGray
 import com.orderize.orderize.ui.theme.textGray
 
 @Composable
 fun OrderItemsCard(
     modifier: Modifier = Modifier,
-    items: List<MockPizza> = listOf(MockPizza(), MockPizza()),
+    items: List<Pizza> = emptyList(),
     showCheckBox: Boolean = false,
-    onCheckBoxClicked: (MockPizza) -> Unit = {}
+    onCheckBoxClicked: (Pizza) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -83,18 +83,18 @@ fun OrderItemsCard(
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = pizza.qtt.toString(),
-                                color = Color.Black,
-                                fontSize = 16.sp,
-                                modifier = Modifier
-                                    .padding(
-                                        horizontal = 8.dp
-                                    ),
-                                fontWeight = FontWeight.Bold
-                            )
+//                            Text(
+//                                text = pizza.qtt.toString(),
+//                                color = Color.Black,
+//                                fontSize = 16.sp,
+//                                modifier = Modifier
+//                                    .padding(
+//                                        horizontal = 8.dp
+//                                    ),
+//                                fontWeight = FontWeight.Bold
+//                            )
 
-                            Spacer(Modifier.width(36.dp))
+//                            Spacer(Modifier.width(36.dp))
 
                             Text(
                                 text = pizza.name,

@@ -4,7 +4,7 @@ import android.util.Log
 import com.orderize.orderize.model.User
 import com.orderize.orderize.repository.AppDataStore
 import com.orderize.orderize.repository.CommonRepository
-import com.orderize.orderize.repository.login.local.UserDao
+import com.orderize.orderize.repository.dao.UserDao
 
 class ProfileRepository(
     private val dataStore: AppDataStore,

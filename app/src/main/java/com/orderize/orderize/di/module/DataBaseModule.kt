@@ -21,4 +21,5 @@ val dataBaseModule = module {
         db.build()
     }
     single { get<AppDataBase>().userDao }
+    single { get<AppDataBase>().orderDao }
 }

@@ -1,11 +1,22 @@
 package com.orderize.orderize.ui.orderdetails
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.orderize.orderize.model.NetResource
+import com.orderize.orderize.model.Order
+import com.orderize.orderize.model.enum.OrderStatus
+import com.orderize.orderize.repository.order.OrderRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class OrderDetailsViewModel: ViewModel() {
+class OrderDetailsViewModel(
+    private val repository: OrderRepository
+): ViewModel() {
 
     private val _uiState: MutableStateFlow<OrderDetailsUiState> = MutableStateFlow(
         OrderDetailsUiState()
@@ -23,35 +34,77 @@ class OrderDetailsViewModel: ViewModel() {
                     }
                 },
                 onStartClick = {
-                    _uiState.update {
-                        it.copy(
-                            order = it.order.copy(status = "Em Preparo"),
-                           // showConfirmationDialog = !it.showConfirmationDialog
-                            showConfirmationDialog = false,
-                            showSnackbar = true,
-                            snackbarMessage = "foi iniciado"
-                        )
+                    viewModelScope.launch(Dispatchers.IO) {
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                loadingStatusChange = true,
+                                showConfirmationDialog = false
+                            )
+                        }
+                        val orderToUpdate = _uiState.value.order
+                        val apiOrder = repository.putOrderInPreparingStatus(orderToUpdate.id)
+                        if (apiOrder is NetResource.Success) {
+                            _uiState.update {
+                                it.copy(
+                                    order = apiOrder.data,
+                                    showConfirmationDialog = false,
+                                    showSnackbar = true,
+                                    snackbarMessage = "Pedido Em Preparo",
+                                    loadingStatusChange = false
+                                )
+                            }
+                            repository.saveOrderLocal(apiOrder.data)
+                        } else {
+                            _uiState.update {
+                                it.copy(
+                                    showConfirmationDialog = false,
+                                    showSnackbar = true,
+                                    snackbarMessage = "Falha ao atualizar o pedido, tente novamente",
+                                    loadingStatusChange = false
+                                )
+                            }
+                        }
                     }
                 },
                 onFinishClick = {
-                    _uiState.update {
-                        it.copy(
-                            order = it.order.copy(
-                                status = "Finalizado"
-                            ),
-                            //showConfirmationDialog = !it.showConfirmationDialog,
-                            showConfirmationDialog = false,
-                            showSnackbar = true,
-                            orderFinished = true,
-                            snackbarMessage = "foi concluído"
-                        )
+                    viewModelScope.launch(Dispatchers.IO) {
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                loadingStatusChange = true,
+                                showConfirmationDialog = false
+                            )
+                        }
+                        val orderToUpdate = _uiState.value.order
+                        val apiOrder = repository.putOrderInAvailableStatus(orderToUpdate.id)
+                        if (apiOrder is NetResource.Success) {
+                            _uiState.update {
+                                it.copy(
+                                    order = apiOrder.data,
+                                    showConfirmationDialog = false,
+                                    showSnackbar = true,
+                                    snackbarMessage = "Pedido Concluído",
+                                    loadingStatusChange = false,
+                                    orderFinished = true
+                                )
+                            }
+                            repository.saveOrderLocal(apiOrder.data)
+                        } else {
+                            _uiState.update {
+                                it.copy(
+                                    showConfirmationDialog = false,
+                                    showSnackbar = true,
+                                    snackbarMessage = "Falha ao atualizar o pedido, tente novamente",
+                                    loadingStatusChange = false
+                                )
+                            }
+                        }
                     }
                 },
                 onItemCompleted = {
                     // TOOD: Vai atualiza o item
                 },
                 onCheckBoxClicked = {
-                    val updatedItems = _uiState.value.order.items.map { pizza ->
+                    val updatedItems = _uiState.value.order.pizzas.map { pizza ->
                         if (pizza == it) {
                             pizza.copy(isChecked = !pizza.isChecked)
                         } else {
@@ -60,7 +113,7 @@ class OrderDetailsViewModel: ViewModel() {
                     }
                     _uiState.update {
                         it.copy(
-                            order = it.order.copy(items = updatedItems)
+                            order = it.order.copy(pizzas = updatedItems)
                         )
                     }
                 }
@@ -74,8 +127,11 @@ class OrderDetailsViewModel: ViewModel() {
         }
     }
 
-
-    fun findOrderById(itemId: Long) {
-        // TODO: Buscar o item no back e setar no state, para ser utilizado na tela
+    fun setOrder(order: Order) {
+        Log.i("OrderDetailsViewModel", order.toString())
+        _uiState.update {
+            it.copy(order = order)
+        }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.orderize.orderize.ui.navigation
 
+import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -9,6 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.orderize.orderize.model.Order
+import com.orderize.orderize.ui.common.SharedOrderViewModel
 import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.drinks.DrinkScreen
@@ -30,7 +35,11 @@ import com.orderize.orderize.ui.profile.ProfileScreen
 import com.orderize.orderize.ui.profile.ProfileViewModel
 import com.orderize.orderize.ui.writeOrder.WriteOrderScreen
 import com.orderize.orderize.ui.writeOrder.WriteOrderViewModel
+import com.orderize.orderize.util.LocalDateAdapter
+import com.orderize.orderize.util.LocalTimeAdapter
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Composable
 fun OrderizeNavigation() {
@@ -62,12 +71,18 @@ fun OrderizeNavigation() {
             composable<OrderDetailsRoute> { navBackStackEntry ->
                 val arguments = navBackStackEntry.toRoute<OrderDetailsRoute>()
                 val viewModel: OrderDetailsViewModel = koinViewModel()
+                val decodedJson = Uri.decode(arguments.order)
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(LocalTime::class.java, LocalTimeAdapter())
+                    .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+                    .create()
+                val order = gson.fromJson(decodedJson, Order::class.java)
                 OrderDetailsScreen(
                     viewModel = viewModel,
-                    itemId = arguments.itemId,
                     navController = navController,
                     modifier = modifier,
-                    showStatus = arguments.showStatus
+                    showStatus = arguments.showStatus,
+                    order = order
                 )
             }
 
@@ -82,7 +97,7 @@ fun OrderizeNavigation() {
             }
 
             composable<HistoryRoute> {
-                HistoryOrdersScreen(navController = navController, modifier = modifier, viewModel = HistoryViewModel())
+                HistoryOrdersScreen(navController = navController, modifier = modifier, viewModel = koinViewModel())
             }
 
             composable<ForgotPasswordRoute> {
