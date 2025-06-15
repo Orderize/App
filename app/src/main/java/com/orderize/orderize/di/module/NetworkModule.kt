@@ -6,6 +6,7 @@ import com.chuckerteam.chucker.api.RetentionManager
 import com.orderize.orderize.BuildConfig
 import com.orderize.orderize.repository.AppDataStore
 import com.orderize.orderize.repository.login.network.ILoginService
+import com.orderize.orderize.repository.reset_password.network.IResetPasswordService
 import com.orderize.orderize.repository.order.network.OrderService
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -67,4 +68,6 @@ val networkModule = module {
     single { get<Retrofit>().create(ILoginService::class.java) }
 
     single { get<Retrofit>().create(OrderService::class.java) }
+
+    single { get<Retrofit>().create(IResetPasswordService::class.java) }
 }

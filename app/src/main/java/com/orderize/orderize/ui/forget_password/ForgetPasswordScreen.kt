@@ -1,4 +1,4 @@
-package com.orderize.orderize.ui.login
+package com.orderize.orderize.ui.forget_password
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -41,16 +41,25 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
-import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.repository.reset_password.ResetPasswordRepository
+import com.orderize.orderize.ui.navigation.ForgetPasswordRoute
+import com.orderize.orderize.ui.navigation.LoginRoute
+import com.orderize.orderize.ui.theme.darkerMossGreen
 import com.orderize.orderize.ui.theme.mossGreen
 
 @Composable
-fun ForgotPasswordScreen(
-    viewModel: ForgotPasswordViewModel,
+fun ForgetPasswordScreen(
+    viewModel: ForgetPasswordViewModel,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
+
+    val alertTextColor = when (state.isPasswordResetSucessfull) {
+        true -> Color.Green
+        false ->  Color.Red
+        null -> Color.Red
+    }
 
     Column(
         modifier = modifier
@@ -83,7 +92,6 @@ fun ForgotPasswordScreen(
 
         val focusRequesterEmail = remember { FocusRequester() }
         val email = state.email
-        val alertPhrase = state.alertPhrase
 
         TextField(
             value = email,
@@ -115,10 +123,10 @@ fun ForgotPasswordScreen(
             Spacer(modifier = Modifier.size(24.dp))
 
             Text(
-                text = alertPhrase,
+                text = state.alertPhrase,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                color = Color.Red,
+                color = alertTextColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -127,7 +135,7 @@ fun ForgotPasswordScreen(
 
         Spacer(modifier = Modifier.size(24.dp))
 
-        if (state.loading) {
+        if (state.isLoading) {
             CircularProgressIndicator(
                 color = Color.Black,
                 modifier = Modifier
@@ -135,6 +143,7 @@ fun ForgotPasswordScreen(
             )
         } else {
             Button(
+                enabled = !state.isLoading && state.isEmailValid(),
                 onClick = { state.onResetPasswordButtonClicked(email) },
                 modifier = Modifier
                     .widthIn(min = 200.dp)
@@ -147,7 +156,7 @@ fun ForgotPasswordScreen(
                 Text(
                     text = "Recuperar Senha",
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = if (state.isEmailValid()) Color.White else darkerMossGreen
                 )
             }
         }
@@ -155,10 +164,10 @@ fun ForgotPasswordScreen(
         Spacer(modifier = Modifier.size(24.dp))
 
         TextButton(
+            enabled = !state.isLoading,
             onClick = {
-                // TODO: Navegar para tela de Login
-                navController.navigate("login_route") {
-                    popUpTo("forgot_password_route") { inclusive = true }
+                navController.navigate(LoginRoute) {
+                    popUpTo<ForgetPasswordRoute> { inclusive = true }
                 }
             }
         ) {
@@ -177,5 +186,5 @@ fun ForgotPasswordScreen(
 @Composable
 private fun ForgotPasswordScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    ForgotPasswordScreen(modifier = modifier, navController = navController, viewModel = ForgotPasswordViewModel())
+    //ForgotPasswordScreen(modifier = modifier, navController = navController, viewModel = ForgetPasswordViewModel())
 }

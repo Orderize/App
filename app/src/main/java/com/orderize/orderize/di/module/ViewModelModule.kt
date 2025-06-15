@@ -2,7 +2,7 @@ package com.orderize.orderize.di.module
 
 import com.orderize.orderize.ui.common.SharedOrderViewModel
 import com.orderize.orderize.ui.drinks.DrinkViewModel
-import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.ui.forget_password.ForgetPasswordViewModel
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.history.HistoryViewModel
 import com.orderize.orderize.ui.login.LoginViewModel
@@ -23,7 +23,7 @@ val viewModelModule = module {
     viewModel { DrinkViewModel() }
     viewModel { GeminiViewModel(get()) }
     viewModel { WriteOrderViewModel() }
-    viewModel { ForgotPasswordViewModel() }
     viewModel { SharedOrderViewModel() }
     viewModel { HistoryViewModel(get()) }
+    viewModel { ForgetPasswordViewModel(get()) }
 }

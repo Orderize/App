@@ -49,6 +49,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.orderize.orderize.R
+import com.orderize.orderize.ui.navigation.ForgetPasswordRoute
 import com.orderize.orderize.ui.navigation.HomePizzaioloRoute
 import com.orderize.orderize.ui.navigation.LoginRoute
 import com.orderize.orderize.ui.navigation.OrderCreateRoute
@@ -184,7 +185,9 @@ fun LoginScreen(
 
         TextButton(
             onClick = {
-                //TODO: Navegar para tela de esqueci a senha quando for criada
+                navController.navigate(ForgetPasswordRoute) {
+                    popUpTo<LoginRoute> { inclusive = true}
+                }
             }
         ) {
             Text(
@@ -226,12 +229,12 @@ fun LoginScreen(
         if (state.userLogged) {
             if (state.userType == 1) {
                 navController.navigate(HomePizzaioloRoute) {
-                    popUpTo(LoginRoute) { inclusive = true }
+                    popUpTo<LoginRoute> { inclusive = true }
                     launchSingleTop = true
                 }
             } else {
                 navController.navigate(OrderCreateRoute) {
-                    popUpTo(LoginRoute) { inclusive = true }
+                    popUpTo<LoginRoute> { inclusive = true }
                     launchSingleTop = true
                 }
             }

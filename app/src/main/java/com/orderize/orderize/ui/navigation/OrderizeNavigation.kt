@@ -18,11 +18,11 @@ import com.orderize.orderize.ui.common.component.BottomNavBar
 import com.orderize.orderize.ui.common.component.TopBar
 import com.orderize.orderize.ui.drinks.DrinkScreen
 import com.orderize.orderize.ui.drinks.DrinkViewModel
-import com.orderize.orderize.ui.forgotpassword.ForgotPasswordViewModel
+import com.orderize.orderize.ui.forget_password.ForgetPasswordScreen
+import com.orderize.orderize.ui.forget_password.ForgetPasswordViewModel
 import com.orderize.orderize.ui.gemini.GeminiViewModel
 import com.orderize.orderize.ui.history.HistoryOrdersScreen
 import com.orderize.orderize.ui.history.HistoryViewModel
-import com.orderize.orderize.ui.login.ForgotPasswordScreen
 import com.orderize.orderize.ui.login.LoginScreen
 import com.orderize.orderize.ui.login.LoginViewModel
 import com.orderize.orderize.ui.order.OrderScreen
@@ -100,10 +100,10 @@ fun OrderizeNavigation() {
                 HistoryOrdersScreen(navController = navController, modifier = modifier, viewModel = koinViewModel())
             }
 
-            composable<ForgotPasswordRoute> {
-                val viewModel: ForgotPasswordViewModel = koinViewModel()
+            composable<ForgetPasswordRoute> {
+                val viewModel: ForgetPasswordViewModel = koinViewModel()
 
-                ForgotPasswordScreen(viewModel = viewModel, navController = navController, modifier = modifier)
+                ForgetPasswordScreen(viewModel = viewModel, navController = navController, modifier = modifier)
             }
 
             composable<PizzaioloProfileRoute> {
