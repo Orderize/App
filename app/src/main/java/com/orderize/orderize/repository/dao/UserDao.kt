@@ -1,8 +1,9 @@
-package com.orderize.orderize.repository.login.local
+package com.orderize.orderize.repository.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.orderize.orderize.model.User
 import com.orderize.orderize.repository.entity.UserEntity
@@ -20,12 +21,12 @@ interface UserDao {
     suspend fun getUserByApiToken(token: String): User?
 
     @Query("DELETE FROM User WHERE apiToken = :token")
-    suspend fun deleteUserByApiToke(token: Long): Int?
+    suspend fun deleteUserByApiToken(token: String): Int?
 
     @Delete
     suspend fun deleteUser(user: UserEntity): Int?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveUser(user: UserEntity): Long?
 
 }

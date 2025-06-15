@@ -6,6 +6,7 @@ import com.orderize.orderize.di.module.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.dsl.koinConfiguration
 
 class OrderizeApplication: Application() {
 

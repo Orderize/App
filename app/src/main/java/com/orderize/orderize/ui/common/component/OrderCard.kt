@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,15 +24,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.orderize.orderize.R
-import com.orderize.orderize.model.MockOrder
+import com.orderize.orderize.model.Drink
+import com.orderize.orderize.model.Flavor
+import com.orderize.orderize.model.Order
+import com.orderize.orderize.model.Pizza
+import com.orderize.orderize.model.User
+import com.orderize.orderize.model.enum.OrderStatus
 import com.orderize.orderize.ui.theme.strokeGray
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun OrderCard(
-    item: MockOrder,
+    item: Order,
     modifier: Modifier = Modifier,
-    onCardClick: (MockOrder) -> Unit = {},
+    onCardClick: (Order) -> Unit = {},
     showStatus: Boolean = true
 ) {
     Card(
@@ -75,21 +79,36 @@ fun OrderCard(
                             .size(50.dp)
                             .offset(x = -12.dp),
                         painter = painterResource(R.drawable.ic_gray_clock),
-                        contentDescription = "Clock"
+                        contentDescription = "Ícone de relógio"
                     )
-
-                    Text(
+                    Row(
                         modifier = Modifier
                             .weight(1f)
-                            .offset(
-                                x = -22.dp,
-                                y = 2.dp
-                            ),
-                        text = "${item.createdTime}",
-                        color = strokeGray,
-                        fontSize = 24.sp,
-                    )
+                            .offset(x = -22.dp, y = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = item.date.format(DateTimeFormatter.ofPattern("HH:mm")),
+                            color = strokeGray,
+                            fontSize = 24.sp,
+                        )
 
+                        if (!showStatus) {
+                            Image(
+                                modifier = Modifier
+                                    .size(40.dp)
+                                    .padding(horizontal = 4.dp),
+                                painter = painterResource(R.drawable.calendar),
+                                contentDescription = "Ícone de calendário"
+                            )
+
+                            Text(
+                                text = item.creationDate.format(DateTimeFormatter.ofPattern("dd/MM")),
+                                color = strokeGray,
+                                fontSize = 24.sp,
+                            )
+                        }
+                    }
                 }
             }
 
@@ -99,8 +118,13 @@ fun OrderCard(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 if (showStatus) {
+                    val status = when (item.status) {
+                        OrderStatus.PENDENTE.databaseName -> OrderStatus.PENDENTE.displayName
+                        OrderStatus.EM_PREPARO.databaseName -> OrderStatus.EM_PREPARO.displayName
+                        else -> OrderStatus.FINALIZADO.displayName
+                    }
                     Text(
-                        text = item.status,
+                        text = status,
                         color = Color.White,
                         modifier = Modifier
                             .background(
@@ -134,11 +158,62 @@ fun OrderCard(
 @Preview(showBackground = true)
 @Composable
 fun OrderCardPreview(modifier: Modifier = Modifier) {
-    val item = MockOrder(
-        12,
-        "Salão",
-        "Pendente",
-        LocalTime.of(21, 12)
+    val mockOrder = Order(
+        id = 1L,
+        client = User(
+            id = 101L,
+            name = "Maria Oliveira",
+            email = "maria.oliveira@email.com",
+            role = "",
+            companyId = 1L
+        ),
+        pizzas = listOf(
+            Pizza(
+                id = 201L,
+                name = "Meia Calabresa Meia Portuguesa",
+                price = 55.00,
+                observations = "Sem cebola na portuguesa",
+                flavors = listOf(
+                    Flavor(
+                        id = 301L,
+                        name = "Calabresa",
+                        description = "Calabresa fatiada com cebola e orégano",
+                        price = 0.0
+                    ),
+                    Flavor(
+                        id = 302L,
+                        name = "Portuguesa",
+                        description = "Presunto, queijo, ovos, cebola, pimentão e azeitonas",
+                        price = 0.0
+                    )
+                ),
+                border = "Catupiry",
+                size = "Grande",
+                mass = "Tradicional"
+            )
+        ),
+        drinks = listOf(
+            Drink(
+                id = 401L,
+                name = "Coca-Cola",
+                description = "Refrigerante de Cola",
+                price = 8.00,
+                milimeters = 600
+            ),
+            Drink(
+                id = 402L,
+                name = "Suco de Laranja",
+                description = "Suco natural de laranja",
+                price = 7.00,
+                milimeters = 500
+            )
+        ),
+        date = LocalTime.now(),
+        type = "Delivery",
+        price = 55.00,
+        table = 0L,
+        status = "PENDENTE",
+        lastModified = LocalTime.now()
     )
-    OrderCard(item)
+    OrderCard(mockOrder)
 }

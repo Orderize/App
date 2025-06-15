@@ -5,7 +5,7 @@ import com.orderize.orderize.model.User
 import com.orderize.orderize.repository.AppDataStore
 import com.orderize.orderize.repository.CommonRepository
 import com.orderize.orderize.repository.entity.UserEntity
-import com.orderize.orderize.repository.login.local.UserDao
+import com.orderize.orderize.repository.dao.UserDao
 import com.orderize.orderize.repository.login.network.LoginService
 import com.orderize.orderize.repository.login.network.dto.LoginRequestDto
 import com.orderize.orderize.repository.login.network.dto.UserResponseDto
@@ -28,7 +28,7 @@ class LoginRepository(
         )
 
         if (tokenResponse !is NetResource.Success) {
-            throw Exception("Login inváido, email ou senha incorretos!")
+            return NetResource.Fail("Login inváido, email ou senha incorretos!")
         }
 
         val userResponse = service.getUserByEmail(

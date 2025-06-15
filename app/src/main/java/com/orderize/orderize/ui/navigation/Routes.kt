@@ -6,12 +6,28 @@ import kotlinx.serialization.Serializable
 object LoginRoute
 
 @Serializable
+object ForgetPasswordRoute
+
+@Serializable
 object HomePizzaioloRoute
 
 @Serializable
 object HistoryRoute
 
 @Serializable
+object WriteOrderRoute
+
+@Serializable
 data class OrderDetailsRoute(
-    val itemId: Long
+    val showStatus: Boolean = true,
+    val order: String
 )
+
+@Serializable
+object OrderCreateRoute
+
+@Serializable
+object PizzaioloProfileRoute
+
+@Serializable
+object DrinkRoute
