@@ -121,11 +121,11 @@ fun HeatmapScreen(
         ) {
             items(state.tables) { table ->
                 CardTable(table = table) {selectedTable  ->
-                    navController.navigate(
-                        OrderDetailsRoute(
-                            itemId = table.id
-                        )
-                    )
+//                    navController.navigate(
+//                        OrderDetailsRoute(
+//                            itemId = table.id
+//                        )
+//                    )
                 }
             }
         }

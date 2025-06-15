@@ -19,8 +19,8 @@ object WriteOrderRoute
 
 @Serializable
 data class OrderDetailsRoute(
-    val itemId: Long,
-    val showStatus: Boolean = true
+    val showStatus: Boolean = true,
+    val order: String
 )
 
 @Serializable

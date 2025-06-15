@@ -1,13 +1,10 @@
 package com.orderize.orderize.ui.login
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.orderize.orderize.di.module.repositoryModule
 import com.orderize.orderize.model.NetResource
 import com.orderize.orderize.repository.login.LoginRepository
-import com.orderize.orderize.repository.login.local.UserDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
