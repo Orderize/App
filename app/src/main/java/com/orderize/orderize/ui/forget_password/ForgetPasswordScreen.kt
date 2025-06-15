@@ -44,6 +44,7 @@ import com.orderize.orderize.R
 import com.orderize.orderize.repository.reset_password.ResetPasswordRepository
 import com.orderize.orderize.ui.navigation.ForgetPasswordRoute
 import com.orderize.orderize.ui.navigation.LoginRoute
+import com.orderize.orderize.ui.theme.darkerMossGreen
 import com.orderize.orderize.ui.theme.mossGreen
 
 @Composable
@@ -155,7 +156,7 @@ fun ForgetPasswordScreen(
                 Text(
                     text = "Recuperar Senha",
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = if (state.isEmailValid()) Color.White else darkerMossGreen
                 )
             }
         }

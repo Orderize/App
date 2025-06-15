@@ -23,7 +23,6 @@ val viewModelModule = module {
     viewModel { DrinkViewModel() }
     viewModel { GeminiViewModel(get()) }
     viewModel { WriteOrderViewModel() }
-    viewModel { ForgotPasswordViewModel() }
     viewModel { SharedOrderViewModel() }
     viewModel { HistoryViewModel(get()) }
     viewModel { ForgetPasswordViewModel(get()) }

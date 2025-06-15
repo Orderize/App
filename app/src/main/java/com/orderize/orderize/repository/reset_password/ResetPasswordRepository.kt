@@ -1,11 +1,9 @@
 package com.orderize.orderize.repository.reset_password
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import com.orderize.orderize.model.NetResource
 import com.orderize.orderize.repository.AppDataStore
 import com.orderize.orderize.repository.CommonRepository
-import com.orderize.orderize.repository.login.local.UserDao
 import com.orderize.orderize.repository.reset_password.network.ResetPasswordService
 import com.orderize.orderize.repository.reset_password.network.dto.ResetPasswordRequestDto
 
