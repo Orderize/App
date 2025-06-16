@@ -118,6 +118,6 @@ dependencies {
 
 
     //Chucker
-    debugImplementation("com.github.chuckerteam.chucker:library:4.1.0")
+    implementation("com.github.chuckerteam.chucker:library:4.1.0")
 
 }
